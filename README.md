@@ -1,2 +1,2 @@
 # WonderJamAutomne
-WonderJam D'automne
+WonderJam d'Automne
