@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        // TODO : gérer l'orientation du joueur/sprite
+        // TODO : gérer l'orientation du joueur/sprite PAR UN ANIMATOR
         transform.Translate(speed * new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * Time.deltaTime);
 
         if (inRange.Count > 0)
