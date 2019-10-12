@@ -113,19 +113,31 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 case State.SOIL:
                     if (player.HasSeed())
-                        return new Action("Planter", Button.A, null, 0, () => { if (player.PlantSeed()) ChangeState(State.PLANTED_DRY); });
+                        return new Action("Planter", Button.A, null, 0, () =>
+                        {
+                            if (player.PlantSeed()) ChangeState(State.PLANTED_DRY);
+                        });
                     break;
                 case State.PLANTED_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, () => { if (player.WaterPlant()) ChangeState(State.PLANTED_WET); });
+                        return new Action("Arroser", Button.A, null, 0, () =>
+                        {
+                            if (player.WaterPlant()) ChangeState(State.PLANTED_WET);
+                        });
                     break;
                 case State.YOUNG_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, () => { if (player.WaterPlant()) ChangeState(State.YOUNG_WET); });
+                        return new Action("Arroser", Button.A, null, 0, () =>
+                        {
+                            if (player.WaterPlant()) ChangeState(State.YOUNG_WET);
+                        });
                     break;
                 case State.MATURE:
                     if (HasSeed())
-                        return new Action("Récolter", Button.A, null, 0, () => { player.HarvestSeed(); stateDuration = 0; });
+                        return new Action("Récolter", Button.A, null, 0, () =>
+                        {
+                            player.HarvestSeed(); stateDuration = 0;
+                        });
                     break;
                 case State.BURNT:
                     return new Action("Arracher", Button.A, null, 0, () => ChangeState(State.SOIL));

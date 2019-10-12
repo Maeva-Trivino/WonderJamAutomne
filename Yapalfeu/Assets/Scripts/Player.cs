@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector3 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        Vector3 input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
@@ -93,8 +93,13 @@ public class Player : MonoBehaviour
                 // TODO : mapper l'action.button au bon bouton
                 // TODO : gérer le temps d'appui
                 // TODO : gérer les combos
-                if (Input.GetKeyDown(KeyCode.E))
-                    action.Do();
+                if (InputManager.GetButtonDown(Button.A))
+                {
+                    if (action.combos != null)
+                        StartCoroutine(action.ListenCombo());
+                    else
+                        action.Do();
+                }
             }
             else
             {
@@ -115,7 +120,7 @@ public class Player : MonoBehaviour
         }
 
         // TODO : changer le bouton pour poser le seau
-        if (Input.GetKeyDown(KeyCode.F))
+        if (InputManager.GetButtonDown(Button.B))
             DropBucket();
     }
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Action
 {
@@ -25,5 +27,22 @@ public class Action
     public void Do()
     {
         doAction();
+    }
+
+    public IEnumerator ListenCombo()
+    {
+        List<Button> bufferCombos = new List<Button>(combos);
+        while(comboGoal > 0 && InputManager.GetButtonDown(Button.A))
+        {
+            if(InputManager.GetButtonDown(bufferCombos[0]))
+                bufferCombos.RemoveAt(0);
+
+            if (bufferCombos.Count == 0)
+            {
+                bufferCombos.AddRange(combos);
+                comboGoal--;
+            }
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
