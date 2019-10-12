@@ -18,9 +18,13 @@ public class Player : MonoBehaviour
     // Cible de l'intéraction
     private GameObject selected;
 
+    private int seedCount;
+    private Bucket bucket;
+
     // Start is called before the first frame update
     void Start()
     {
+        seedCount = 1;
         inRange = new List<GameObject>();
         popup.text = "";
     }
@@ -29,6 +33,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
+        // TODO : gérer l'orientation du joueur/sprite
         transform.Translate(speed * new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * Time.deltaTime);
 
         if (inRange.Count > 0)
@@ -60,7 +65,7 @@ public class Player : MonoBehaviour
             interactive.Select();
 
             // On affiche l'action correspondante
-            Action action = interactive.GetAction(state);
+            Action action = interactive.GetAction(this);
 
             if (action != null)
             {
@@ -68,6 +73,16 @@ public class Player : MonoBehaviour
                 screenPos.y += 30;
                 popup.transform.position = screenPos;
                 popup.text = action.name;
+
+                // TODO : mapper l'action.button au bon bouton
+                // TODO : gérer le temps d'appui
+                // TODO : gérer les combos
+                if (Input.GetKeyDown(KeyCode.E))
+                    action.Do();
+            }
+            else
+            {
+                popup.text = "";
             }
         }
         else
@@ -82,6 +97,10 @@ public class Player : MonoBehaviour
                 selected = null;
             }
         }
+
+        // TODO : changer le bouton pour poser le seau
+        if (Input.GetKeyDown(KeyCode.F))
+            DropBucket();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -101,6 +120,100 @@ public class Player : MonoBehaviour
         if (interactive != null)
         {
             inRange.Remove(collision.gameObject);
+        }
+    }
+
+    public bool HasSeed()
+    {
+        return seedCount > 0;
+    }
+
+    public bool PlantSeed()
+    {
+        if (HasSeed())
+        {
+            seedCount--;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool HasBucket()
+    {
+        return bucket != null;
+    }
+
+    public bool HasEmptyBucket()
+    {
+        return HasBucket() && !bucket.isFilled();
+    }
+
+    public bool HasFilledBucket()
+    {
+        return HasBucket() && bucket.isFilled();
+    }
+
+    public bool WaterPlant()
+    {
+        if (HasFilledBucket())
+        {
+            bucket.Empty();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void HarvestSeed()
+    {
+        seedCount++;
+    }
+
+    public bool PickUpBucket(Bucket bucket)
+    {
+        if (!HasBucket())
+        {
+            this.bucket = bucket;
+            this.bucket.Deselect();
+            this.bucket.gameObject.SetActive(false);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool FillBucket()
+    {
+        if (HasEmptyBucket())
+        {
+            bucket.Fill();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool DropBucket()
+    {
+        if (HasBucket())
+        {
+            // TODO : poser à côté du joueur et non sur le joueur
+            bucket.SetOnGround(transform.position);
+            bucket = null;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
