@@ -16,12 +16,13 @@ public class Bucket : MonoBehaviour, Interactive
     void Start()
     {
         state = State.EMPTY;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Empty()
@@ -53,7 +54,11 @@ public class Bucket : MonoBehaviour, Interactive
     {
         if (!player.HasBucket())
         {
-            return new Action("Prendre", Button.A, null, 0, 0, () => { if (player.PickUpBucket(this)) gameObject.SetActive(false); });
+            return new Action("Prendre", Button.A, null, 0, () =>
+            {
+                if (player.PickUpBucket(this)) 
+                    gameObject.SetActive(false);
+            }, 0);
         }
         else
         {

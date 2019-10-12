@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private float speed = 1f;
 
     [SerializeField]
-    private Text popup;
+    private Text popup = null;
     #endregion
 
     #region Private
@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private GameObject selected;
     private int seedCount;
     private Bucket bucket;
+    private Action currentAction;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
@@ -47,7 +48,9 @@ public class Player : MonoBehaviour
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector3 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        Vector3 input = Vector3.zero;
+        if(currentAction == null || !currentAction.isBusy) 
+            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
@@ -89,12 +92,19 @@ public class Player : MonoBehaviour
                 screenPos.y += 30;
                 popup.transform.position = screenPos;
                 popup.text = action.name;
+                if(currentAction == null || !currentAction.isBusy) 
+                    currentAction = action;
 
-                // TODO : mapper l'action.button au bon bouton
                 // TODO : gérer le temps d'appui
-                // TODO : gérer les combos
-                if (Input.GetKeyDown(KeyCode.E))
-                    action.Do();
+                // TODO : feedback combo
+                if (!action.isBusy && InputManager.GetButtonDown(Button.A))
+                {
+                    action.isBusy = true;
+                    if (action.combos != null)
+                        StartCoroutine(action.ListenCombo());
+                    else
+                        action.Do();
+                }
             }
             else
             {
@@ -115,7 +125,7 @@ public class Player : MonoBehaviour
         }
 
         // TODO : changer le bouton pour poser le seau
-        if (Input.GetKeyDown(KeyCode.F))
+        if (InputManager.GetButtonDown(Button.B))
             DropBucket();
     }
 
@@ -151,6 +161,7 @@ public class Player : MonoBehaviour
         if (HasSeed())
         {
             seedCount--;
+            UIManager.instance.UpdateSeeds(seedCount);
             return true;
         }
         else
@@ -178,6 +189,7 @@ public class Player : MonoBehaviour
     {
         if (HasFilledBucket())
         {
+            UIManager.instance.EmptyBucket();
             bucket.Empty();
             return true;
         }
@@ -190,6 +202,7 @@ public class Player : MonoBehaviour
     public void HarvestSeed()
     {
         seedCount++;
+        UIManager.instance.UpdateSeeds(seedCount);
     }
 
     public bool PickUpBucket(Bucket bucket)
@@ -199,6 +212,7 @@ public class Player : MonoBehaviour
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
+            UIManager.instance.PickUpBucket(this.bucket.isFilled());
             return true;
         }
         else
@@ -211,6 +225,7 @@ public class Player : MonoBehaviour
     {
         if (HasEmptyBucket())
         {
+            UIManager.instance.FilledBucket();
             bucket.Fill();
             return true;
         }
@@ -226,6 +241,7 @@ public class Player : MonoBehaviour
         {
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position);
+            UIManager.instance.DropBucket();
             bucket = null;
             return true;
         }

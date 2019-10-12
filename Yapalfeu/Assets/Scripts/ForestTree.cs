@@ -11,16 +11,29 @@ public class ForestTree : MonoBehaviour, Interactive
         PLANTED_WET,
         YOUNG_DRY,
         YOUNG_WET,
-        MATURE,
+        MATURE, // TODO when do we drop seeds?
         BURNT
     }
 
-    State state;
+    #region Variables
+    #region Editor
+    [SerializeField]
+    private static float
+        plantedGrowDuration = 3f,
+        youngGrowDuration = 3f,
+        seedGrowDuration = 10f,
+        burnDuration = 3f;
+    #endregion
 
-    float stateDuration;
+    #region Private
+    private State state;
+
+    private float stateDuration;
 
     // Négatif s'il ne brûle pas
-    float burning;
+    private float burning;
+    #endregion
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +49,11 @@ public class ForestTree : MonoBehaviour, Interactive
         {
             burning += Time.deltaTime;
 
-            if (burning >= Config.burnDuration)
+            if (burning >= burnDuration)
+            {
                 ChangeState(State.BURNT);
+                UIManager.instance.DeleteTree();
+            }
         }
 
         stateDuration += Time.deltaTime;
@@ -45,12 +61,16 @@ public class ForestTree : MonoBehaviour, Interactive
         switch (state)
         {
             case State.PLANTED_WET:
-                if (stateDuration >= Config.plantedGrowDuration)
+                if (stateDuration >= plantedGrowDuration)
                     ChangeState(State.YOUNG_DRY);
                 break;
             case State.YOUNG_WET:
-                if (stateDuration >= Config.youngGrowDuration)
+                if (stateDuration >= youngGrowDuration)
+                {
                     ChangeState(State.MATURE);
+                    UIManager.instance.AddTree();
+                }
+
                 break;
         }
     }
@@ -59,6 +79,8 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
+        if(s==State.YOUNG_DRY)
+            GetComponent<Collider2D>().isTrigger = false;
     }
 
     public void Select()
@@ -73,7 +95,7 @@ public class ForestTree : MonoBehaviour, Interactive
 
     private bool HasSeed()
     {
-        return state == State.MATURE && stateDuration >= Config.seedGrowDuration;
+        return state == State.MATURE && stateDuration >= seedGrowDuration;
     }
 
     private bool IsBurning()
@@ -91,7 +113,7 @@ public class ForestTree : MonoBehaviour, Interactive
         if (IsBurning())
         {
             if (player.HasFilledBucket())
-                return new Action("Éteindre", Button.A, null, 0, Config.actionDuration, () => { if (player.WaterPlant()) StopBurning(); });
+                return new Action("Éteindre", Button.A, null, 0, () => { if (player.WaterPlant()) StopBurning(); });
         }
         else
         {
@@ -100,22 +122,36 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 case State.SOIL:
                     if (player.HasSeed())
-                        return new Action("Planter", Button.A, null, 0, Config.actionDuration, () => { if (player.PlantSeed()) ChangeState(State.PLANTED_DRY); });
+                        return new Action("Planter", Button.A, null, 0, () =>
+                        {
+                            if (player.PlantSeed())
+                                ChangeState(State.PLANTED_DRY);
+                        });
                     break;
                 case State.PLANTED_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, Config.actionDuration, () => { if (player.WaterPlant()) ChangeState(State.PLANTED_WET); });
+                        return new Action("Arroser", Button.A, null, 0, () =>
+                        {
+                            if (player.WaterPlant()) ChangeState(State.PLANTED_WET);
+                        });
                     break;
                 case State.YOUNG_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, Config.actionDuration, () => { if (player.WaterPlant()) ChangeState(State.YOUNG_WET); });
+                        return new Action("Arroser", Button.A, null, 0, () =>
+                        {
+                            if (player.WaterPlant()) ChangeState(State.YOUNG_WET);
+                        });
                     break;
                 case State.MATURE:
                     if (HasSeed())
-                        return new Action("Récolter", Button.A, null, 0, Config.actionDuration, () => { player.HarvestSeed(); stateDuration = 0; });
+                        return new Action("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
+                        {
+                            player.HarvestSeed();
+                            stateDuration = 0;
+                        });
                     break;
                 case State.BURNT:
-                    return new Action("Arracher", Button.A, null, 0, Config.actionDuration, () => ChangeState(State.SOIL));
+                    return new Action("Arracher", Button.A, null, 0, () => ChangeState(State.SOIL));
             }
         }
 
