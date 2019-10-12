@@ -5,22 +5,27 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public Text popup;
-
+    #region Variables
+    #region Editor
     // Translation speed of the player
-    public float speed = 1f;
+    [SerializeField]
+    private float speed = 1f;
+    #endregion
 
+    #region Private
     private PlayerState state;
-
     // Liste des objects à portée d'intéraction
     private List<GameObject> inRange;
-
     // Cible de l'intéraction
     private GameObject selected;
-
     private int seedCount;
     private Bucket bucket;
+    private Text popup;
+    #endregion
+    #endregion
 
+    #region Methods
+    #region Editor
     // Start is called before the first frame update
     void Start()
     {
@@ -122,7 +127,9 @@ public class Player : MonoBehaviour
             inRange.Remove(collision.gameObject);
         }
     }
+    #endregion
 
+    #region Public
     public bool HasSeed()
     {
         return seedCount > 0;
@@ -216,4 +223,6 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+    #endregion
+    #endregion
 }
