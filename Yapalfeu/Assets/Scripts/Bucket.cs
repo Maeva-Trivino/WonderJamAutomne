@@ -16,6 +16,7 @@ public class Bucket : MonoBehaviour, Interactive
     void Start()
     {
         state = State.EMPTY;
+
     }
 
     // Update is called once per frame
