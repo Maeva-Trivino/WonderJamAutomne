@@ -94,7 +94,6 @@ public class Player : MonoBehaviour
                 popup.text = action.name;
                 if(currentAction == null || !currentAction.isBusy) 
                     currentAction = action;
-                Debug.Log(currentAction.GetHashCode());
 
                 // TODO : gérer le temps d'appui
                 // TODO : feedback combo
@@ -162,6 +161,7 @@ public class Player : MonoBehaviour
         if (HasSeed())
         {
             seedCount--;
+            UIManager.instance.UpdateSeeds(seedCount);
             return true;
         }
         else
@@ -189,6 +189,7 @@ public class Player : MonoBehaviour
     {
         if (HasFilledBucket())
         {
+            UIManager.instance.EmptyBucket();
             bucket.Empty();
             return true;
         }
@@ -201,6 +202,7 @@ public class Player : MonoBehaviour
     public void HarvestSeed()
     {
         seedCount++;
+        UIManager.instance.UpdateSeeds(seedCount);
     }
 
     public bool PickUpBucket(Bucket bucket)
@@ -210,6 +212,7 @@ public class Player : MonoBehaviour
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
+            UIManager.instance.PickUpBucket(this.bucket.isFilled());
             return true;
         }
         else
@@ -222,6 +225,7 @@ public class Player : MonoBehaviour
     {
         if (HasEmptyBucket())
         {
+            UIManager.instance.FilledBucket();
             bucket.Fill();
             return true;
         }
@@ -237,6 +241,7 @@ public class Player : MonoBehaviour
         {
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position);
+            UIManager.instance.DropBucket();
             bucket = null;
             return true;
         }

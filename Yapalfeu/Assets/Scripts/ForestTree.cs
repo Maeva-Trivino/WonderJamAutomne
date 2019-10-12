@@ -57,7 +57,10 @@ public class ForestTree : MonoBehaviour, Interactive
             burning += Time.deltaTime;
 
             if (burning >= burnDuration)
+            {
                 ChangeState(State.BURNT);
+                UIManager.instance.DeleteTree();
+            }
         }
 
         stateDuration += Time.deltaTime;
@@ -70,7 +73,11 @@ public class ForestTree : MonoBehaviour, Interactive
                 break;
             case State.YOUNG_WET:
                 if (stateDuration >= youngGrowDuration)
+                {
                     ChangeState(State.MATURE);
+                    UIManager.instance.AddTree();
+                }
+
                 break;
         }
     }
@@ -153,7 +160,8 @@ public class ForestTree : MonoBehaviour, Interactive
                     if (player.HasSeed())
                         return new Action("Planter", Button.A, null, 0, () =>
                         {
-                            if (player.PlantSeed()) ChangeState(State.PLANTED_DRY);
+                            if (player.PlantSeed())
+                                ChangeState(State.PLANTED_DRY);
                         });
                     break;
                 case State.PLANTED_DRY:
@@ -174,7 +182,8 @@ public class ForestTree : MonoBehaviour, Interactive
                     if (HasSeed())
                         return new Action("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
                         {
-                            player.HarvestSeed(); stateDuration = 0;
+                            player.HarvestSeed();
+                            stateDuration = 0;
                         });
                     break;
                 case State.BURNT:
