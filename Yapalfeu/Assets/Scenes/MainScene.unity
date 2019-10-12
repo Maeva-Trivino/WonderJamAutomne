@@ -2459,6 +2459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  popup: {fileID: 943187973}
 --- !u!58 &1521029453
 CircleCollider2D:
   m_ObjectHideFlags: 0

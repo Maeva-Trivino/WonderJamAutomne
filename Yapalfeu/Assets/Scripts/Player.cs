@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     // Translation speed of the player
     [SerializeField]
     private float speed = 1f;
+
+    [SerializeField]
+    private Text popup;
     #endregion
 
     #region Private
@@ -20,7 +23,9 @@ public class Player : MonoBehaviour
     private GameObject selected;
     private int seedCount;
     private Bucket bucket;
-    private Text popup;
+
+    private Animator _animator;
+    private Rigidbody2D _rigidbody2D;
     #endregion
     #endregion
 
@@ -32,14 +37,18 @@ public class Player : MonoBehaviour
         seedCount = 1;
         inRange = new List<GameObject>();
         popup.text = "";
+        _animator = GetComponentInChildren<Animator>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        // TODO : gérer l'orientation du joueur/sprite PAR UN ANIMATOR
-        transform.Translate(speed * new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * Time.deltaTime);
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        _animator.SetBool("IsWalking", input.magnitude > .1f);
+        _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
+        _rigidbody2D.MovePosition(speed * input * Time.deltaTime);
 
         if (inRange.Count > 0)
         {
