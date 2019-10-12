@@ -72,6 +72,8 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
+        if(s==State.YOUNG_DRY)
+            GetComponent<Collider2D>().isTrigger = false;
     }
 
     public void Select()
@@ -134,7 +136,7 @@ public class ForestTree : MonoBehaviour, Interactive
                     break;
                 case State.MATURE:
                     if (HasSeed())
-                        return new Action("Récolter", Button.A, null, 0, () =>
+                        return new Action("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
                         {
                             player.HarvestSeed(); stateDuration = 0;
                         });

@@ -50,6 +50,34 @@ public class InputManager
         return false;
     }
 
+    public static bool GetButton(Button button)
+    {
+        switch (button)
+        {
+            case Button.A:
+                return Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Joystick1Button0) || Input.GetKey(KeyCode.Joystick2Button0);
+            case Button.B:
+                return Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Joystick1Button1) || Input.GetKey(KeyCode.Joystick2Button1);
+            case Button.X:
+                return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Joystick1Button2) || Input.GetKey(KeyCode.Joystick2Button2);
+            case Button.Y:
+                return Input.GetKey(KeyCode.G) || Input.GetKey(KeyCode.Joystick1Button3) || Input.GetKey(KeyCode.Joystick2Button3);
+            case Button.LB:
+                return Input.GetKey(KeyCode.Y) || Input.GetKey(KeyCode.Joystick1Button4) || Input.GetKey(KeyCode.Joystick2Button4);
+            case Button.RB:
+                return Input.GetKey(KeyCode.H) || Input.GetKey(KeyCode.Joystick1Button5) || Input.GetKey(KeyCode.Joystick2Button5);
+            case Button.LEFT:
+                return Input.GetAxisRaw("Horizontal") < -.2f;
+            case Button.RIGHT:
+                return Input.GetAxisRaw("Horizontal") > .2f;
+            case Button.UP:
+                return Input.GetAxisRaw("Vertical") < -.2f;
+            case Button.DOWN:
+                return Input.GetAxisRaw("Vertical") > .2f;
+        }
+        return false;
+    }
+
     public static float GetAxis(Axis axis)
     {
         switch (axis)

@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private GameObject selected;
     private int seedCount;
     private Bucket bucket;
+    private Action currentAction;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
@@ -47,7 +48,9 @@ public class Player : MonoBehaviour
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector3 input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
+        Vector3 input = Vector3.zero;
+        if(currentAction == null || !currentAction.isBusy) 
+            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
@@ -89,12 +92,13 @@ public class Player : MonoBehaviour
                 screenPos.y += 30;
                 popup.transform.position = screenPos;
                 popup.text = action.name;
+                currentAction = action;
 
-                // TODO : mapper l'action.button au bon bouton
                 // TODO : gérer le temps d'appui
-                // TODO : gérer les combos
-                if (InputManager.GetButtonDown(Button.A))
+                // TODO : feedback combo
+                if (!action.isBusy && InputManager.GetButton(Button.A))
                 {
+                    action.isBusy = true;
                     if (action.combos != null)
                         StartCoroutine(action.ListenCombo());
                     else

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class WaterSource : MonoBehaviour, Interactive
@@ -29,8 +30,8 @@ public class WaterSource : MonoBehaviour, Interactive
     {
         // TODO : ajuster le temps pour remplir le seau
         if (player.HasEmptyBucket())
-        {
-            return new Action("Remplir", Button.A, null, 0, () => player.FillBucket());
+        { 
+            return new Action("Remplir", Button.A, new List<Button>() {Button.UP, Button.DOWN }, 3, () => player.FillBucket());
         }
         else
         {
