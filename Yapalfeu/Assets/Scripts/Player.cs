@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
+    private SpriteRenderer _spriteRenderer;
     #endregion
     #endregion
 
@@ -39,16 +40,17 @@ public class Player : MonoBehaviour
         popup.text = "";
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        Vector3 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
-        _rigidbody2D.MovePosition(speed * input * Time.deltaTime);
+        _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
 
         if (inRange.Count > 0)
         {
@@ -103,7 +105,7 @@ public class Player : MonoBehaviour
         {
             // Effacement du popup
             popup.text = "";
-            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+            _spriteRenderer.color = Color.white;
 
             if (selected != null)
             {
