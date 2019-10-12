@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private float speed = 1f;
 
     [SerializeField]
-    private Text popup = null;
+    private GameObject popup = null;
     #endregion
 
     #region Private
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     {
         seedCount = 1;
         inRange = new List<GameObject>();
-        popup.text = "";
+        updatePopup(null);
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -47,86 +47,136 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentAction != null)
+        {
+            if (InputManager.GetButton(currentAction.button))
+            {
+                currentAction.Do();
+                updatePopup(currentAction);
+            }
+            else
+            {
+                currentAction = null;
+            }
+        }
+            
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
         Vector3 input = Vector3.zero;
-        if(currentAction == null || !currentAction.isBusy) 
+        if (currentAction == null) 
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
 
-        if (inRange.Count > 0)
+        if (currentAction == null)
         {
-            // On cherche l'object intéractif le plus proche
-            float distanceMin = float.PositiveInfinity;
-            GameObject nearest = null;
-
-            foreach (GameObject o in inRange)
+            if (inRange.Count > 0)
             {
-                float distance = (o.transform.position - transform.position).magnitude;
-                if (distance < distanceMin)
+                // On cherche l'object intéractif le plus proche
+                float distanceMin = float.PositiveInfinity;
+                GameObject nearest = null;
+
+                foreach (GameObject o in inRange)
                 {
-                    distanceMin = distance;
-                    nearest = o;
+                    float distance = (o.transform.position - transform.position).magnitude;
+                    if (distance < distanceMin)
+                    {
+                        distanceMin = distance;
+                        nearest = o;
+                    }
                 }
-            }
 
-            if (nearest != selected)
-            {
-                // On désélectionne l'objet sélectionné auparavant
-                if (selected != null)
-                    selected.GetComponent<Interactive>().Deselect();
-                selected = nearest;
-            }
+                if (nearest != selected)
+                {
+                    // On désélectionne l'objet sélectionné auparavant
+                    if (selected != null)
+                        selected.GetComponent<Interactive>().Deselect();
+                    selected = nearest;
+                }
 
-            Interactive interactive = selected.GetComponent<Interactive>();
-            // On le sélectionne (mise en surbrillance)
-            interactive.Select();
+                Interactive interactive = selected.GetComponent<Interactive>();
+                // On le sélectionne (mise en surbrillance)
+                interactive.Select();
 
-            // On affiche l'action correspondante
-            Action action = interactive.GetAction(this);
+                // On affiche l'action correspondante
+                Action action = interactive.GetAction(this);
 
-            if (action != null)
-            {
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-                screenPos.y += 30;
-                popup.transform.position = screenPos;
-                popup.text = action.name;
-                if(currentAction == null || !currentAction.isBusy) 
+                if (action != null && InputManager.GetButtonDown(action.button))
+                {
                     currentAction = action;
+                    currentAction.Do();
 
-                // TODO : gérer le temps d'appui
-                // TODO : feedback combo
-                if (!action.isBusy && InputManager.GetButtonDown(Button.A))
-                {
-                    action.isBusy = true;
-                    if (action.combos != null)
-                        StartCoroutine(action.ListenCombo());
-                    else
-                        action.Do();
+                    if (currentAction.IsDone())
+                        currentAction = null;
                 }
+
+                updatePopup(action);
             }
             else
             {
-                popup.text = "";
-            }
-        }
-        else
-        {
-            // Effacement du popup
-            popup.text = "";
-            _spriteRenderer.color = Color.white;
+                updatePopup(null);
+                _spriteRenderer.color = Color.white;
 
-            if (selected != null)
-            {
-                selected.GetComponent<Interactive>().Deselect();
-                selected = null;
+                if (selected != null)
+                {
+                    selected.GetComponent<Interactive>().Deselect();
+                    selected = null;
+                }
             }
         }
 
         // TODO : changer le bouton pour poser le seau
         if (InputManager.GetButtonDown(Button.B))
             DropBucket();
+    }
+
+    private void updatePopup(Action action)
+    {
+        if (action != null)
+        {
+            Text text = popup.GetComponentInChildren<Text>();
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+            screenPos.y += 45;
+
+            if (action == currentAction)
+            {
+                if (action.combos == null)
+                {
+                    text.text = "";
+                }
+                else
+                {
+                    text.text = "";
+                    foreach (Button b in action.combos)
+                    {
+                        text.text += InputManager.GetButtonName(b) + " ";
+                    }
+
+                    text.text.TrimEnd();
+                }
+
+                Slider slider = popup.GetComponentInChildren<Slider>();
+                slider.transform.localScale = new Vector3(1, 1, 1);
+                slider.value = action.progression;
+                slider.gameObject.SetActive(true);
+            }
+            else
+            {
+                text.text = "(" + InputManager.GetButtonName(action.button) + ") " + action.name;
+                popup.GetComponentInChildren<Slider>().gameObject.transform.localScale = new Vector3(0, 0, 0);
+            }
+
+            popup.transform.position = screenPos;
+            popup.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (popup.activeSelf)
+            {
+                popup.GetComponentInChildren<Slider>().gameObject.transform.localScale = new Vector3(0, 0, 0);
+                popup.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

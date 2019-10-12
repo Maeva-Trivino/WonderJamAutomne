@@ -43,9 +43,9 @@ public class InputManager
             case Button.RIGHT:
                 return Input.GetAxisRaw("Horizontal") > .2f;
             case Button.UP:
-                return Input.GetAxisRaw("Vertical") < -.2f;
-            case Button.DOWN:
                 return Input.GetAxisRaw("Vertical") > .2f;
+            case Button.DOWN:
+                return Input.GetAxisRaw("Vertical") < -.2f;
         }
         return false;
     }
@@ -71,9 +71,9 @@ public class InputManager
             case Button.RIGHT:
                 return Input.GetAxisRaw("Horizontal") > .2f;
             case Button.UP:
-                return Input.GetAxisRaw("Vertical") < -.2f;
-            case Button.DOWN:
                 return Input.GetAxisRaw("Vertical") > .2f;
+            case Button.DOWN:
+                return Input.GetAxisRaw("Vertical") < -.2f;
         }
         return false;
     }
@@ -88,5 +88,26 @@ public class InputManager
                 return Input.GetAxisRaw("Vertical");
         };
         return 0f;
+    }
+
+    public static string GetButtonName(Button button)
+    {
+        switch (button)
+        {
+            case Button.A:
+                return "E";
+            case Button.B:
+                return "F";
+            case Button.LEFT:
+                return "←";
+            case Button.RIGHT:
+                return "→";
+            case Button.UP:
+                return "↑";
+            case Button.DOWN:
+                return "↓";
+        }
+
+        return "Unknown key name";
     }
 }

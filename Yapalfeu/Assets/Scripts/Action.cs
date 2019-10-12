@@ -8,8 +8,12 @@ public class Action
     public Button button;
     public List<Button> combos;
     public int comboGoal;
+    public int actualCombo;
+    List<Button> comboBuffer;
     public float pressDuration;
-    public bool isBusy;
+    public float actualDuration;
+    public float progression;
+
     public const float defaultDuration = 0.5f;
 
     // Action à exécuter
@@ -21,33 +25,58 @@ public class Action
         this.button = button;
         this.combos = combos;
         this.comboGoal = comboGoal;
+        this.actualCombo = 0;
+        if (this.combos != null)
+            this.comboBuffer = new List<Button>(combos);
         this.pressDuration = pressDuration;
+        this.actualDuration = 0f;
         this.doAction = doAction;
+        this.progression = 0f;
+    }
+
+    public bool IsDone()
+    {
+        return progression >= 1f;
     }
 
     public void Do()
     {
-        doAction();
-        isBusy = false;
-    }
+        if (IsDone())
+            return;
 
-    public IEnumerator ListenCombo()
-    {
-        List<Button> bufferCombos = new List<Button>(combos);
-        while(comboGoal > 0 && InputManager.GetButton(Button.A))
+        if (combos != null)
         {
-            if(InputManager.GetButtonDown(bufferCombos[0]))
-                bufferCombos.RemoveAt(0);
+            if (InputManager.GetButtonDown(comboBuffer[0]))
+                comboBuffer.RemoveAt(0);
 
-            if (bufferCombos.Count == 0)
+            if (comboBuffer.Count == 0)
             {
-                bufferCombos.AddRange(combos);
-                comboGoal--;
+                comboBuffer.AddRange(combos);
+                actualCombo++;
             }
-            yield return new WaitForEndOfFrame();
+
+            if (actualCombo == comboGoal)
+            {
+                doAction();
+                progression = 1f;
+            }
+            else
+            {
+                progression = ((float)actualCombo + (float)(combos.Count-comboBuffer.Count) /combos.Count) / comboGoal;
+            }
         }
-        if(comboGoal == 0)
-            Do();
-        isBusy = false;
+        else
+        {
+            this.actualDuration += Time.deltaTime;
+            if (actualDuration >= pressDuration)
+            {
+                doAction();
+                progression = 1f;
+            }
+            else
+            {
+                progression = actualDuration / pressDuration;
+            }
+        }
     }
 }
