@@ -92,11 +92,13 @@ public class Player : MonoBehaviour
                 screenPos.y += 30;
                 popup.transform.position = screenPos;
                 popup.text = action.name;
-                currentAction = action;
+                if(currentAction == null || !currentAction.isBusy) 
+                    currentAction = action;
+                Debug.Log(currentAction.GetHashCode());
 
                 // TODO : gérer le temps d'appui
                 // TODO : feedback combo
-                if (!action.isBusy && InputManager.GetButton(Button.A))
+                if (!action.isBusy && InputManager.GetButtonDown(Button.A))
                 {
                     action.isBusy = true;
                     if (action.combos != null)
