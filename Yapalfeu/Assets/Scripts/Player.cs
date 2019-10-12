@@ -94,7 +94,6 @@ public class Player : MonoBehaviour
                 popup.text = action.name;
                 if(currentAction == null || !currentAction.isBusy) 
                     currentAction = action;
-                Debug.Log(currentAction.GetHashCode());
 
                 // TODO : gérer le temps d'appui
                 // TODO : feedback combo
