@@ -7,11 +7,12 @@ public class Action
     public List<Button> combos;
     public int comboGoal;
     public float pressDuration;
+    public const float defaultDuration = 0.5f;
 
     // Action à exécuter
     private System.Action doAction;
 
-    public Action(string name, Button button, List<Button> combos, int comboGoal, float pressDuration, System.Action doAction)
+    public Action(string name, Button button, List<Button> combos, int comboGoal, System.Action doAction, float pressDuration = defaultDuration)
     {
         this.name = name;
         this.button = button;

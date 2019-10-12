@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private float speed = 1f;
 
     [SerializeField]
-    private Text popup;
+    private Text popup = null;
     #endregion
 
     #region Private
