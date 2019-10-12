@@ -33,6 +33,11 @@ public class ForestTree : MonoBehaviour, Interactive
     // Négatif s'il ne brûle pas
     private float burning;
     #endregion
+
+    #region Static
+    public static List<ForestTree> trees = new List<ForestTree>();
+    #endregion
+
     #endregion
 
     // Start is called before the first frame update
@@ -40,6 +45,8 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         state = State.SOIL;
         burning = -1;
+
+        trees.Add(this);
     }
 
     // Update is called once per frame
@@ -86,12 +93,24 @@ public class ForestTree : MonoBehaviour, Interactive
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
-    private bool HasSeed()
+    public bool HasSeed()
     {
         return state == State.MATURE && stateDuration >= seedGrowDuration;
     }
+    public bool RemoveSeed()
+    {
+        if(HasSeed())
+        {
+            stateDuration = 0f;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-    private bool IsBurning()
+    public bool IsBurning()
     {
         return burning >= 0;
     }
@@ -101,6 +120,23 @@ public class ForestTree : MonoBehaviour, Interactive
         burning = -1;
     }
 
+    public bool IsDrownable()
+    {
+        return state == State.PLANTED_DRY || state == State.PLANTED_WET || state == State.YOUNG_DRY || state == State.YOUNG_WET ;
+    }
+
+    public bool Drown()
+    {
+        if (IsDrownable())
+        {
+            ChangeState(State.SOIL);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public Action GetAction(Player player)
     {
         if (IsBurning())
@@ -147,5 +183,19 @@ public class ForestTree : MonoBehaviour, Interactive
         }
 
         return null;
+    }
+
+    public bool SetOnFire()
+    {
+        if (burning < 0)
+        {
+            burning = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 }
