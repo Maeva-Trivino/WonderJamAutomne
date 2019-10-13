@@ -58,10 +58,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (SpriteRenderer r in GetComponentsInChildren<SpriteRenderer>())
-        {
-            r.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
-        }
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+        renderers[0].sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        renderers[1].sortingOrder = renderers[0].sortingOrder + 1;
 
         if (currentAction != null)
         {
@@ -318,7 +317,7 @@ public class Player : MonoBehaviour
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
             UIManager.instance.PickUpBucket(this.bucket.isFilled());
-            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -333,7 +332,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.FilledBucket();
             bucket.Fill();
-            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             return true;
         }
         else

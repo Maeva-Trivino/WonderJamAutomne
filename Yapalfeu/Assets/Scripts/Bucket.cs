@@ -15,31 +15,34 @@ public class Bucket : MonoBehaviour, Interactive
     [SerializeField]
     private Sprite bucket_sprite_filled = null;
 
-    State state;
+    private State state;
+
+    private SpriteRenderer renderer;
 
     // Start is called before the first frame update
     void Start()
     {
         state = State.EMPTY;
-        GetComponent<SpriteRenderer>().sprite = bucket_sprite_empty;
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        renderer.sprite = bucket_sprite_empty;
     }
 
     // Update is called once per frame
     void Update()
     {
-        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
     }
 
     public void Empty()
     {
         state = State.EMPTY;
-        GetComponent<SpriteRenderer>().sprite = bucket_sprite_empty;
+        renderer.sprite = bucket_sprite_empty;
     }
 
     public void Fill()
     {
         state = State.FILLED;
-        GetComponent<SpriteRenderer>().sprite = bucket_sprite_filled;
+        renderer.sprite = bucket_sprite_filled;
     }
 
     public bool isFilled()
@@ -49,14 +52,14 @@ public class Bucket : MonoBehaviour, Interactive
 
     public void Select()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
-        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        renderer.material.SetInt("_OutlineEnabled", 1);
+        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
-        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        renderer.material.SetInt("_OutlineEnabled", 0);
+        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public UserAction GetAction(Player player)

@@ -33,6 +33,7 @@ public class ForestTree : MonoBehaviour, Interactive
     // Négatif s'il ne brûle pas
     private float burning;
 
+    private SpriteRenderer renderer;
     private Animator animator;
 
     #endregion
@@ -44,9 +45,10 @@ public class ForestTree : MonoBehaviour, Interactive
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
 
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
 
         if (Random.Range(0, 1000) < 750)
             ChangeState(State.SOIL);
@@ -116,12 +118,12 @@ public class ForestTree : MonoBehaviour, Interactive
         if (state != State.SOIL)
         {
             GetComponent<Collider2D>().isTrigger = false;
-            GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+            renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
         }
         else
         {
             GetComponent<Collider2D>().isTrigger = true;
-            GetComponent<SpriteRenderer>().sortingOrder = -32768;
+            renderer.sortingOrder = -32768;
         }
 
         switch (state)
@@ -148,14 +150,14 @@ public class ForestTree : MonoBehaviour, Interactive
 
     public void Select()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
-        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        renderer.material.SetInt("_OutlineEnabled", 1);
+        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
-        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        renderer.material.SetInt("_OutlineEnabled", 0);
+        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()
