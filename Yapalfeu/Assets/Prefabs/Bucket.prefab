@@ -51,7 +51,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1536d60d51475f34b82d8112ea67bb7b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -72,7 +72,8 @@ SpriteRenderer:
   m_SortingLayerID: -1753613095
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e2976d09b53264ffbbb9210a1ae1dcc0, type: 3}
+  m_Sprite: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -119,7 +120,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.25}
   serializedVersion: 2
-  m_Radius: 0.75
+  m_Radius: 0.25
 --- !u!114 &6747993747298142955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,3 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80dbf876dc23266409ab0f2af5df310f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bucket_sprite_empty: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+    type: 3}
+  bucket_sprite_filled: {fileID: 949185140388405158, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+    type: 3}
