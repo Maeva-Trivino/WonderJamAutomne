@@ -21,7 +21,7 @@ public class ForestTree : MonoBehaviour, Interactive
     private static float
         plantedGrowDuration = 3f,
         youngGrowDuration = 5f,
-        seedGrowDuration = 8f,
+        seedGrowDuration = 10f,
         burnDuration = 8f;
 
     #region SoundEffects
@@ -31,6 +31,9 @@ public class ForestTree : MonoBehaviour, Interactive
     //Sound of burning tree
     [SerializeField]
     private AudioSource burningTreeSound;
+    //Sound of throwing a tree
+    [SerializeField]
+    private AudioSource throwTreeSound;
     #endregion
     #endregion
 
@@ -278,11 +281,17 @@ public class ForestTree : MonoBehaviour, Interactive
                         });
                     break;
                 case State.BURNT:
-                    return new UserAction("Arracher", Button.A, null, 0, () => ChangeState(State.SOIL));
+                    return new UserAction("Arracher", Button.A, null, 0, () => Arracher_Arbre());
             }
         }
 
         return null;
+    }
+
+    private void Arracher_Arbre()
+    {
+        throwTreeSound.Play();
+        ChangeState(State.SOIL);
     }
 
     public bool SetOnFire()
