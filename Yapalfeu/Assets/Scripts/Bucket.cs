@@ -75,24 +75,12 @@ public class Bucket : MonoBehaviour, Interactive
         }
         else
         {
-            if (player.GetBucket().state != this.state)
+            return new UserAction("Echanger", Button.A, null, 0, () =>
             {
-                return new UserAction("Échanger", Button.A, null, 0, () =>
+                if (player.GetBucket().state != this.state)
                 {
-                    if (player.GetBucket().state != this.state)
+                    if (this.isFilled())
                     {
-<<<<<<< HEAD
-                        if (this.isFilled())
-                        {
-                            this.Empty();
-                            player.FillBucket();
-                        }
-                        else
-                        {
-                            this.Fill();
-                            player.WaterPlant();
-                        }
-=======
                         this.Empty();
                         player.ExchangeBucket(false);
                     }
@@ -100,14 +88,9 @@ public class Bucket : MonoBehaviour, Interactive
                     {
                         this.Fill();
                         player.ExchangeBucket(true);
->>>>>>> Fix sound exchange bucket
                     }
-                }, 0);
-            }
-            else
-            {
-                return null;
-            }
+                }
+            }, 0);
         }
     }
 
