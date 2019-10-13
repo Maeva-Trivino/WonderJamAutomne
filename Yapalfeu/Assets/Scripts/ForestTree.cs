@@ -131,14 +131,14 @@ void Start()
 
     public void Select()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
-        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        /*gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
+        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);*/
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
-        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        /*gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);*/
     }
 
     public bool HasSeed()
