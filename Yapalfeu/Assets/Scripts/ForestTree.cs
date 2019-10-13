@@ -41,8 +41,8 @@ public class ForestTree : MonoBehaviour, Interactive
     public static List<ForestTree> trees = new List<ForestTree>();
     #endregion
     #endregion
-// Start is called before the first frame update
-void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
 
