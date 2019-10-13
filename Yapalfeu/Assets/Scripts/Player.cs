@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     private GameObject selected;
     private int seedCount;
     private Bucket bucket;
-    private Action currentAction;
+    private UserAction currentAction;
     private Vector2 direction;
 
     private Animator _animator;
@@ -109,7 +109,7 @@ public class Player : MonoBehaviour
                 interactive.Select();
 
                 // On affiche l'action correspondante
-                Action action = interactive.GetAction(this);
+                UserAction action = interactive.GetAction(this);
 
                 if (action != null && InputManager.GetButtonDown(action.button))
                 {
@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
             DropBucket();
     }
 
-    private void updatePopup(Action action)
+    private void updatePopup(UserAction action)
     {
         if (action != null)
         {
@@ -324,10 +324,8 @@ public class Player : MonoBehaviour
             // Calculate the distance from the surface and the "error" relative
             // to the floating height.
             float distance = ((Vector3) hits[1].point - transform.position).magnitude;
-            Debug.Log(distance > _trigger.radius);
             return distance > _trigger.radius;
         }
-        Debug.Log("out");
         return true;
     }
     #endregion
