@@ -59,11 +59,11 @@ public class Bucket : MonoBehaviour, Interactive
         gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
-    public Action GetAction(Player player)
+    public UserAction GetAction(Player player)
     {
         if (!player.HasBucket())
         {
-            return new Action("Prendre", Button.A, null, 0, () =>
+            return new UserAction("Prendre", Button.A, null, 0, () =>
             {
                 if (player.PickUpBucket(this)) 
                     gameObject.SetActive(false);

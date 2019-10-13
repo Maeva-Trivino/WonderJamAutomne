@@ -7,5 +7,5 @@
     // Désélectionne l'objet
     void Deselect();
 
-    Action GetAction(Player player);
+    UserAction GetAction(Player player);
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Action
+public class UserAction
 {
     public string name;
     public Button button;
@@ -19,7 +19,7 @@ public class Action
     // Action à exécuter
     private System.Action doAction;
 
-    public Action(string name, Button button, List<Button> combos, int comboGoal, System.Action doAction, float pressDuration = defaultDuration)
+    public UserAction(string name, Button button, List<Button> combos, int comboGoal, System.Action doAction, float pressDuration = defaultDuration)
     {
         this.name = name;
         this.button = button;
