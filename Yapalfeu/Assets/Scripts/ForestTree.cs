@@ -11,7 +11,7 @@ public class ForestTree : MonoBehaviour, Interactive
         PLANTED_WET,
         YOUNG_DRY,
         YOUNG_WET,
-        MATURE, // TODO when do we drop seeds?
+        MATURE,
         BURNT
     }
 
@@ -21,8 +21,8 @@ public class ForestTree : MonoBehaviour, Interactive
     private static float
         plantedGrowDuration = 3f,
         youngGrowDuration = 3f,
-        seedGrowDuration = 10f,
-        burnDuration = 3f;
+        seedGrowDuration = 7f,
+        burnDuration = 4f;
     #endregion
 
     #region Private
@@ -34,7 +34,7 @@ public class ForestTree : MonoBehaviour, Interactive
     private float burning;
 
     [SerializeField]
-    private Sprite soil, planted, young, mature, burnt;
+    private Sprite soil, planted, young, youngBurning, mature, matureBurning, burnt, seed;
 
     #endregion
 
@@ -66,7 +66,14 @@ void Start()
 
             if (burning >= burnDuration)
             {
-                ChangeState(State.BURNT);
+                if(state == State.MATURE)
+                {
+                    ChangeState(State.BURNT);
+                }
+                else
+                {
+                    ChangeState(State.SOIL);
+                }
                 UIManager.instance.DeleteTree();
             }
         }
@@ -87,36 +94,70 @@ void Start()
                 }
 
                 break;
+            case State.MATURE:
+                if (HasSeed())
+                {
+                    SetSprite();
+                }
+
+                break;
         }
     }
 
+    private void SetSprite()
+    {
+        if (IsBurning())
+        {
+            if (state == State.MATURE)
+            {
+                GetComponent<SpriteRenderer>().sprite = matureBurning;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().sprite = youngBurning;
+            }
+        }
+        else if (HasSeed())
+        {
+            GetComponent<SpriteRenderer>().sprite = seed;
+        }
+        else 
+        {
+            if (state == State.SOIL)
+            {
+                GetComponent<SpriteRenderer>().sprite = soil;
+            }
+            else if (state == State.PLANTED_DRY)
+            {
+                GetComponent<SpriteRenderer>().sprite = planted;
+            }
+            else if (state == State.YOUNG_DRY)
+            {
+                GetComponent<SpriteRenderer>().sprite = young;
+            }
+            else if (state == State.MATURE)
+            {
+                GetComponent<SpriteRenderer>().sprite = mature;
+            }
+            else if (state == State.BURNT)
+            {
+                GetComponent<SpriteRenderer>().sprite = burnt;
+            }
+        }
+        
+    }
     private void ChangeState(State s)
     {
         stateDuration = 0;
         state = s;
 
-        if (s == State.SOIL)
+        if (s == State.SOIL || s == State.BURNT)
         {
-            GetComponent<SpriteRenderer>().sprite = soil;
-        }
-        else if (s == State.PLANTED_DRY)
-        {
-            GetComponent<SpriteRenderer>().sprite = planted;
-        }
-        else if (s == State.YOUNG_DRY)
-        {
-            GetComponent<SpriteRenderer>().sprite = young;
-        }
-        else if (s == State.MATURE)
-        {
-            GetComponent<SpriteRenderer>().sprite = mature;
-        }
-        else if (s == State.BURNT)
-        {
-            GetComponent<SpriteRenderer>().sprite = burnt;
-
+            StopBurning();
         }
 
+        SetSprite();
+        
         if (state != State.SOIL)
         {
             GetComponent<Collider2D>().isTrigger = false;
@@ -165,12 +206,7 @@ void Start()
 
     public bool IsBurnable()
     {
-        return state != State.BURNT && state != State.SOIL ;
-    }
-
-    private void StopBurning()
-    {
-        burning = -1;
+        return state != State.BURNT && state != State.SOIL && state != State.PLANTED_DRY && state != State.PLANTED_WET ;
     }
 
     public bool IsDrownable()
@@ -242,9 +278,10 @@ void Start()
 
     public bool SetOnFire()
     {
-        if (!IsBurning())
+        if (!IsBurning()&& IsBurnable())
         {
             burning = 0;
+            SetSprite();
             return true;
         }
         else
@@ -252,5 +289,10 @@ void Start()
             return false;
         }
         
+    }
+    private void StopBurning()
+    {
+        burning = -1;
+        SetSprite();
     }
 }
