@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HazardAnimationTempest : MonoBehaviour
 {
@@ -36,8 +37,8 @@ public class HazardAnimationTempest : MonoBehaviour
 
         if (mooving)
         {
-            transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
-            
+            ((RectTransform)transform).anchoredPosition += Vector2.right * speed;
+
             List<ForestTree> clone = new List<ForestTree>(treesToDrown.Count);
             foreach (ForestTree t in treesToDrown)
             {
@@ -46,7 +47,7 @@ public class HazardAnimationTempest : MonoBehaviour
 
             foreach (ForestTree t in clone)
             {
-                if (transform.position.x > t.gameObject.transform.position.x)
+                if ((((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500 > t.gameObject.transform.position.x)
                 {
                     t.Drown();
                     treesToDrown.Remove(t);
@@ -55,7 +56,7 @@ public class HazardAnimationTempest : MonoBehaviour
 
             foreach (ForestTree t in burnableTrees)
             {
-                if (t.IsBurning() && transform.position.x > t.gameObject.transform.position.x)
+                if (t.IsBurning() && (((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500 > t.gameObject.transform.position.x)
                 {
                     if (number.Next(1,101) > 50 )
                     {
@@ -64,9 +65,9 @@ public class HazardAnimationTempest : MonoBehaviour
                     
                 }
             }
-            
-            if (transform.position.x > 23.5)
-                {
+
+            if (((RectTransform)transform).anchoredPosition.x > 1000f)
+            {
                 mooving = false;
             }
         }
@@ -75,14 +76,14 @@ public class HazardAnimationTempest : MonoBehaviour
 
     private void Reset()
     {
-        transform.position = new Vector3(-22.5f, -1.5f, 0f);
+        ((RectTransform)transform).anchoredPosition = Vector3.zero;
     }
     public void Trigger(List<ForestTree> treesToDrown, List<ForestTree> burnableTrees)
     {
         this.treesToDrown = treesToDrown;
         this.burnableTrees = burnableTrees;
         Reset();
-        GetComponent<SpriteRenderer>().sprite = sprite;
+        GetComponent<Image>().sprite = sprite;
         mooving = true;
         waveSound.Play();
     }

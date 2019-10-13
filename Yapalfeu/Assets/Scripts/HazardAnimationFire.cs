@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HazardAnimationFire: MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class HazardAnimationFire: MonoBehaviour
     {
         if (mooving)
         {
-            transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
+            ((RectTransform)transform).anchoredPosition += Vector2.right * speed;
 
             List<ForestTree> clone = new List<ForestTree>(treesToBurn.Count);
             foreach (ForestTree t in treesToBurn)
@@ -39,14 +40,14 @@ public class HazardAnimationFire: MonoBehaviour
 
             foreach (ForestTree t in clone)
             {
-                if (transform.position.x > t.gameObject.transform.position.x)
+                if ((((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500 > t.gameObject.transform.position.x)
                 {
                     t.SetOnFire();
                     treesToBurn.Remove(t);
                 }
             }
-            
-            if (transform.position.x > 23.5)
+
+            if (((RectTransform)transform).anchoredPosition.x > 1000f)
             {
                 mooving = false;
             }
@@ -56,13 +57,13 @@ public class HazardAnimationFire: MonoBehaviour
 
     private void Reset()
     {
-        transform.position = new Vector3(-22.5f, -1.5f, 0f);
+        ((RectTransform)transform).anchoredPosition = Vector3.zero;
     }
     public void Trigger(List<ForestTree> treesToBurn)
     {
         this.treesToBurn = treesToBurn;
         Reset();
-        GetComponent<SpriteRenderer>().sprite = sprite;
+        GetComponent<Image>().sprite = sprite;
         mooving = true;
     }
 
