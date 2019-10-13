@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        seedCount = 1;
+        seedCount = 10;
         inRange = new HashSet<GameObject>();
         updatePopup(null);
         UIManager.instance.UpdateSeeds(seedCount);
