@@ -3057,7 +3057,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: E
+  m_Text: "E\u23B5"
 --- !u!222 &1251889182
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8003,6 +8003,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475330378095943780, guid: 7617790728d93334fbde95b19f9557fc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475330378095943780, guid: 7617790728d93334fbde95b19f9557fc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475330378095943780, guid: 7617790728d93334fbde95b19f9557fc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475330378095943780, guid: 7617790728d93334fbde95b19f9557fc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6475330378095943780, guid: 7617790728d93334fbde95b19f9557fc,
         type: 3}

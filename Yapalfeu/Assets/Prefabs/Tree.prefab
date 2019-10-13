@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6475330378095943777}
   - component: {fileID: 6475330378095943776}
   - component: {fileID: 6475330378095943783}
+  - component: {fileID: 824270689}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475330378095943781}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.35, y: 0.32}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -116,16 +117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5bd59b651ccad84eb243eee65518edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soil: {fileID: -2927570643637133958, guid: cbe332e28d01a004aa68a7df514db31a, type: 3}
-  planted: {fileID: 5468703398852792368, guid: cbe332e28d01a004aa68a7df514db31a, type: 3}
-  young: {fileID: -8486554730191911819, guid: 704bae9f7f9f73d49adff755f4b3baee, type: 3}
-  youngBurning: {fileID: -8580071846694361975, guid: 6659b098d44834b40b8a6445025651e0,
-    type: 3}
-  mature: {fileID: 21300000, guid: 3128d8c72f902f341b92dd00a0092d87, type: 3}
-  matureBurning: {fileID: -6590742543184707884, guid: c5064beb11ffd524685478015a43331f,
-    type: 3}
-  burnt: {fileID: 21300000, guid: cd7cef19e1c89934fbee830eb5de8ceb, type: 3}
-  seed: {fileID: 21300000, guid: f1cf5ee6b78af474b80784d898ff3d89, type: 3}
 --- !u!58 &6475330378095943783
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -142,3 +133,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!95 &824270689
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475330378095943781}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 986b4c83de067914da52b1d3786f109c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

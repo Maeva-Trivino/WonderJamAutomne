@@ -345,6 +345,7 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+
     #endregion
 
     #region Private

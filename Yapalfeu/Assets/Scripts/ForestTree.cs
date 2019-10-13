@@ -33,8 +33,7 @@ public class ForestTree : MonoBehaviour, Interactive
     // Négatif s'il ne brûle pas
     private float burning;
 
-    [SerializeField]
-    private Sprite soil, planted, young, youngBurning, mature, matureBurning, burnt, seed;
+    private Animator animator;
 
     #endregion
 
@@ -46,6 +45,8 @@ public class ForestTree : MonoBehaviour, Interactive
 void Start()
     {
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+
+        animator = GetComponent<Animator>();
 
         if (Random.Range(0, 1000) < 750)
             ChangeState(State.SOIL);
@@ -92,60 +93,16 @@ void Start()
                     ChangeState(State.MATURE);
                     UIManager.instance.AddTree();
                 }
-
                 break;
             case State.MATURE:
                 if (HasSeed())
-                {
-                    SetSprite();
-                }
-
+                    animator.SetBool("hasSeed", true);
+                else
+                    animator.SetBool("hasSeed", false);
                 break;
         }
     }
 
-    private void SetSprite()
-    {
-        if (IsBurning())
-        {
-            if (state == State.MATURE)
-            {
-                GetComponent<SpriteRenderer>().sprite = matureBurning;
-            }
-            else
-            {
-                GetComponent<SpriteRenderer>().sprite = youngBurning;
-            }
-        }
-        else if (HasSeed())
-        {
-            GetComponent<SpriteRenderer>().sprite = seed;
-        }
-        else 
-        {
-            if (state == State.SOIL)
-            {
-                GetComponent<SpriteRenderer>().sprite = soil;
-            }
-            else if (state == State.PLANTED_DRY)
-            {
-                GetComponent<SpriteRenderer>().sprite = planted;
-            }
-            else if (state == State.YOUNG_DRY)
-            {
-                GetComponent<SpriteRenderer>().sprite = young;
-            }
-            else if (state == State.MATURE)
-            {
-                GetComponent<SpriteRenderer>().sprite = mature;
-            }
-            else if (state == State.BURNT)
-            {
-                GetComponent<SpriteRenderer>().sprite = burnt;
-            }
-        }
-        
-    }
     private void ChangeState(State s)
     {
         stateDuration = 0;
@@ -155,8 +112,6 @@ void Start()
         {
             StopBurning();
         }
-
-        SetSprite();
         
         if (state != State.SOIL)
         {
@@ -167,6 +122,27 @@ void Start()
         {
             GetComponent<Collider2D>().isTrigger = true;
             GetComponent<SpriteRenderer>().sortingOrder = -32768;
+        }
+
+        switch (state)
+        {
+            case State.SOIL:
+                animator.SetInteger("growState", 0);
+                break;
+            case State.PLANTED_DRY:
+            case State.PLANTED_WET:
+                animator.SetInteger("growState", 1);
+                break;
+            case State.YOUNG_DRY:
+            case State.YOUNG_WET:
+                animator.SetInteger("growState", 2);
+                break;
+            case State.MATURE:
+                animator.SetInteger("growState", 3);
+                break;
+            case State.BURNT:
+                animator.SetInteger("growState", 4);
+                break;
         }
     }
 
@@ -295,7 +271,7 @@ void Start()
         {
             burning = 0;
             BurnSeed();
-            SetSprite();
+            animator.SetBool("isBurning", true);
             return true;
         }
         else
@@ -307,6 +283,6 @@ void Start()
     private void StopBurning()
     {
         burning = -1;
-        SetSprite();
+        animator.SetBool("isBurning", false);
     }
 }
