@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private UIManager uIManager;
     [SerializeField]
     private VideoPlayer videoIntro;
 
@@ -54,7 +53,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, .2f).setRecursive(false);
-        uIManager.gameObject.SetActive(true);
+        LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, .2f).setRecursive(false).setOnComplete(() => SceneManager.LoadScene("MainScene"));
     }
 }
