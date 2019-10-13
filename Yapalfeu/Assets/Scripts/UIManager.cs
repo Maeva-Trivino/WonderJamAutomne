@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
         SetLevel(level, nbGoalTree);
         bucketImg.color = new Color(1f, 1f, 1f, .5f);
         bucketImg.enabled = false;
-        themeSound.Play();s
+        themeSound.Play();
     }
 
     // Update is called once per frame

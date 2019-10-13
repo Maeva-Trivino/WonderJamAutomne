@@ -14,6 +14,10 @@ public class Player : MonoBehaviour
     private GameObject popup = null;
     [SerializeField]
     private GameObject bucket_on_head = null;
+
+    // Sound of getting or putting on the ground the bucket
+    [SerializeField]
+    private AudioSource getBucket;
     #endregion
 
     #region Private
@@ -313,6 +317,7 @@ public class Player : MonoBehaviour
     {
         if (!HasBucket())
         {
+            getBucket.Play();
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
@@ -345,6 +350,7 @@ public class Player : MonoBehaviour
     {
         if (HasBucket() && IsDropAllowed())
         {
+            getBucket.Play();
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position + (Vector3)direction);
             UIManager.instance.DropBucket();
