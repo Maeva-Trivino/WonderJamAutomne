@@ -119,10 +119,10 @@ MonoBehaviour:
   soil: {fileID: -2927570643637133958, guid: cbe332e28d01a004aa68a7df514db31a, type: 3}
   planted: {fileID: 5468703398852792368, guid: cbe332e28d01a004aa68a7df514db31a, type: 3}
   young: {fileID: -8486554730191911819, guid: 704bae9f7f9f73d49adff755f4b3baee, type: 3}
-  youngBurning: {fileID: 3209757031535771184, guid: 3edeaebbe5ddda44bb15c0b4f5f78632,
+  youngBurning: {fileID: -8580071846694361975, guid: 6659b098d44834b40b8a6445025651e0,
     type: 3}
   mature: {fileID: 21300000, guid: 3128d8c72f902f341b92dd00a0092d87, type: 3}
-  matureBurning: {fileID: -6812888715240851637, guid: 3edeaebbe5ddda44bb15c0b4f5f78632,
+  matureBurning: {fileID: -6590742543184707884, guid: c5064beb11ffd524685478015a43331f,
     type: 3}
   burnt: {fileID: 21300000, guid: cd7cef19e1c89934fbee830eb5de8ceb, type: 3}
   seed: {fileID: 21300000, guid: f1cf5ee6b78af474b80784d898ff3d89, type: 3}
