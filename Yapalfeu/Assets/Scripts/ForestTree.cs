@@ -186,6 +186,19 @@ void Start()
     {
         return state == State.MATURE && stateDuration >= seedGrowDuration;
     }
+
+    private bool BurnSeed()
+    {
+        if (HasSeed())
+        {
+            stateDuration = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public bool RemoveSeed()
     {
         if(HasSeed())
@@ -278,9 +291,10 @@ void Start()
 
     public bool SetOnFire()
     {
-        if (!IsBurning()&& IsBurnable())
+        if (!IsBurning() && IsBurnable())
         {
             burning = 0;
+            BurnSeed();
             SetSprite();
             return true;
         }
