@@ -41,12 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Back
+  - name: Ground
     uniqueID: 2318107197
     locked: 0
-  - name: Obstacle
+  - name: Soil
     uniqueID: 2324429005
     locked: 0
-  - name: Player
+  - name: BackTree
     uniqueID: 2541354201
+    locked: 0
+  - name: Player
+    uniqueID: 3263371439
+    locked: 0
+  - name: FrontTree
+    uniqueID: 4236490451
     locked: 0

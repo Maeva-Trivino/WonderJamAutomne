@@ -37,13 +37,11 @@ public class ForestTree : MonoBehaviour, Interactive
     #region Static
     public static List<ForestTree> trees = new List<ForestTree>();
     #endregion
-
     #endregion
-
-    // Start is called before the first frame update
-    void Start()
+// Start is called before the first frame update
+void Start()
     {
-        state = State.SOIL;
+        ChangeState(State.SOIL);
         burning = -1;
 
         trees.Add(this);
@@ -86,8 +84,19 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
-        if(s==State.YOUNG_DRY)
-            GetComponent<Collider2D>().isTrigger = false;
+        if(s == State.SOIL)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+            if (s == State.YOUNG_DRY)
+            {
+                GetComponent<Collider2D>().isTrigger = false;
+            }
+        }
+            
     }
 
     public void Select()
