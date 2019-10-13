@@ -34,7 +34,7 @@ public class ForestTree : MonoBehaviour, Interactive
     private float burning;
 
     [SerializeField]
-    private Sprite soil, planted, young, bottomMature, topMature, burnt;
+    private Sprite soil, planted, young, mature, burnt;
 
     #endregion
 
@@ -45,6 +45,7 @@ public class ForestTree : MonoBehaviour, Interactive
 // Start is called before the first frame update
 void Start()
     {
+        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
         ChangeState(State.SOIL);
         burning = -1;
 
@@ -92,10 +93,6 @@ void Start()
         if (s == State.SOIL)
         {
             GetComponent<SpriteRenderer>().sprite = soil;
-            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
-            transform.localScale = new Vector3(1, 1, 1);
-
-
         }
         else if (s == State.PLANTED_DRY)
         {
@@ -107,38 +104,36 @@ void Start()
         }
         else if (s == State.MATURE)
         {
-
-            GetComponent<SpriteRenderer>().sprite = bottomMature;
-            transform.localScale = new Vector3(2,2,1) ;
-            GetComponent<CircleCollider2D>().radius=0.25f;
-
-            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = topMature;
-
+            GetComponent<SpriteRenderer>().sprite = mature;
         }
         else if (s == State.BURNT)
         {
             GetComponent<SpriteRenderer>().sprite = burnt;
-            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
-            transform.localScale = new Vector3(1, 1, 1);
 
         }
 
         if (state != State.SOIL)
+        {
             GetComponent<Collider2D>().isTrigger = false;
+            GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        }
         else
+        {
             GetComponent<Collider2D>().isTrigger = true;
+            GetComponent<SpriteRenderer>().sortingOrder = -32768;
+        }
     }
 
     public void Select()
     {
-        /*gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
-        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);*/
+        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
+        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        /*gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
-        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);*/
+        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()

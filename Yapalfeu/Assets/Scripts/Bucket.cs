@@ -27,7 +27,7 @@ public class Bucket : MonoBehaviour, Interactive
     // Update is called once per frame
     void Update()
     {
-
+        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
     }
 
     public void Empty()

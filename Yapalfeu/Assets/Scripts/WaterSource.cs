@@ -18,7 +18,7 @@ public class WaterSource : MonoBehaviour, Interactive
     }
     public void Select()
     {
-        gameObject.GetComponent<Tilemap>().color = Color.blue;
+        gameObject.GetComponent<Tilemap>().color = Color.yellow;
     }
 
     public void Deselect()

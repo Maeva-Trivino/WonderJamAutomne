@@ -55,6 +55,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach (SpriteRenderer r in GetComponentsInChildren<SpriteRenderer>())
+        {
+            r.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        }
+
         if (currentAction != null)
         {
             if (InputManager.GetButton(currentAction.button))
