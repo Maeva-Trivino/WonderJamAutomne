@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tempest : Hazard
+public class Tempest
 {
 
-    public void Triggerhazard()
+    public bool Triggerhazard()
     {
         List<ForestTree> drownableTrees = new List<ForestTree>();
         List<ForestTree> burnableTrees = new List<ForestTree>();
@@ -26,8 +26,12 @@ public class Tempest : Hazard
         }
         if (drownableTrees.Count > 0)
         {
-            //bool b =drownableTrees[number.Next(0, drownableTrees.Count - 1)].Drown();
             HazardAnimationTempest.instance.Trigger(drownableTrees,burnableTrees);
+            return true;
+        }
+        else
+        {
+            return false;
         }
 
 
