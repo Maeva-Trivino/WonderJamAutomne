@@ -399,6 +399,10 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+    public Bucket GetBucket()
+    {
+        return bucket;
+    }
 
     #endregion
 
