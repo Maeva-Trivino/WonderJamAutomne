@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
@@ -11,10 +12,12 @@ public class GameManager : MonoBehaviour
 
     private CanvasGroup group;
     private bool isHidden;
+    private bool isCreditOpen;
     // Start is called before the first frame update
     void Start()
     {
         isHidden = false;
+        isCreditOpen = false;
         group = GetComponent<CanvasGroup>();
         LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, 0f).setRecursive(false);
         videoIntro.Play();
@@ -26,11 +29,30 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isHidden && InputManager.GetButtonDown(Button.A))
+        GetComponentsInChildren<Text>()[1].text = "APPUYEZ SUR "+InputManager.GetButtonName(Button.A)+"\nPOUR COMMENCER";
+        if (!isHidden && !isCreditOpen && InputManager.GetButtonDown(Button.A))
         {
             isHidden = true;
             videoIntro.Play();
             StartCoroutine(ShowIntro());
+        }
+        else if(!isHidden && !isCreditOpen && InputManager.GetButtonDown(Button.X))
+        {
+            isCreditOpen = true;
+            transform.GetChild(0).GetComponent<Text>().enabled = false;
+            transform.GetChild(1).GetComponent<Text>().enabled = false;
+            transform.GetChild(2).GetComponent<Text>().enabled = false;
+            transform.GetChild(3).GetComponent<Text>().enabled = true;
+            transform.GetChild(4).GetComponent<Text>().enabled = true;
+        }
+        else if (!isHidden && isCreditOpen && InputManager.GetButtonDown(Button.X))
+        {
+            isCreditOpen = false;
+            transform.GetChild(0).GetComponent<Text>().enabled = true;
+            transform.GetChild(1).GetComponent<Text>().enabled = true;
+            transform.GetChild(2).GetComponent<Text>().enabled = true;
+            transform.GetChild(3).GetComponent<Text>().enabled = false;
+            transform.GetChild(4).GetComponent<Text>().enabled = false;
         }
     }
 

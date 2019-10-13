@@ -238,6 +238,10 @@ public class ForestTree : MonoBehaviour, Interactive
             return false;
         }
     }
+    public bool IsPlant()
+    {
+        return state == State.PLANTED_DRY || state == State.PLANTED_WET;
+    }
     public UserAction GetAction(Player player)
     {
         if (IsBurning())
@@ -247,7 +251,6 @@ public class ForestTree : MonoBehaviour, Interactive
         }
         else
         {
-            // TODO : Mettre des combos ou ajuster le temps d'appui
             switch (state)
             {
                 case State.SOIL:

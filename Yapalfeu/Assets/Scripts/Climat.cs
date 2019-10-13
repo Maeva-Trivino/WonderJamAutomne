@@ -35,9 +35,6 @@ public class Climat : MonoBehaviour
     void Start()
     {
 
-     /*   timeSinceLastFire = 0f;
-        timeSinceLastTempest = 0f;
-        timeSinceLastTornado = 0f;*/
         timeToNextHazard = Random.Range(timeBetweenHazardMin, timeBetweenHazardMax);
 
         fire = new Fire();
@@ -48,9 +45,7 @@ public class Climat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*timeSinceLastFire += Time.deltaTime;
-        timeSinceLastTempest += Time.deltaTime;
-        timeSinceLastTornado += Time.deltaTime;*/
+
         timeSinceLastHazard += Time.deltaTime;
 
 
@@ -67,20 +62,5 @@ public class Climat : MonoBehaviour
             timeSinceLastHazard = 0f;
 
         }
-        /*if (timeSinceLastFire >= timeBetweenFire)
-        {
-            timeSinceLastFire = 0f;
-            fire.Triggerhazard();
-        }
-        if (timeSinceLastTornado >= timeBetweenTornado)
-        {
-            timeSinceLastTornado = 0f;
-            tornado.Triggerhazard();
-        }
-        if (timeSinceLastTempest >= timeBetweenTempest)
-        {
-            timeSinceLastTempest= 0f;
-            tempest.Triggerhazard();
-        }*/
     }
 }

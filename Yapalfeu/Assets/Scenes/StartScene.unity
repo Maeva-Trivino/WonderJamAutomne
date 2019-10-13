@@ -351,6 +351,82 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1990903342}
     m_Modifications:
+    - target: {fileID: 3184378755272339029, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3184378755272339029, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6054844273868838261, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 202.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 6054844273868838261, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -404.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 6054844273868838261, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -255.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6054844273868838261, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 127.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691597222294192172, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691597222294192172, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_Text
+      value: "Cr\xE9dits audio : \n-https://lasonotheque.org/detail-1448-petites-vagues-et-plage-2.html\n-https://lasonotheque.org/detail-0595-vent.html\n-https://lasonotheque.org/detail-1341-essence-prend-feu-2.html\n-http://www.universal-soundbank.com/pieds.htm\n-https://lasonotheque.org/detail-1242-verre-d-eau-remplissage-1.html\n-https://lasonotheque.org/search?q=creuser\n-https://lasonotheque.org/detail-0543-seau-metallique.html\n-https://lasonotheque.org/detail-0559-scie-sur-bois.html\n\nCr\xE9dits
+        sprites h\xE9ros :\nhttps://www.deviantart.com/angel-of-britannia/art/2p-Axis-VX-Sprites-704879302\n\nMixage
+        et composition r\xE9alis\xE9 par Ma\xEBva Trivino sur Logic Pro X et GarageBand\n\nVoix
+        gouttes d'eau : Paul Du\n\nVoix de l'arbre qui grandit : Ma\xEBva Trivino\n\nSprites
+        en Pixel Art r\xE9alis\xE9 par Juliette Laplante sur Piskel\n\nArtwork du
+        menu dessin\xE9 \xE0 la main par Maud Durrafourg\n\nArtwork design\xE9 par
+        Maud Durrafourg et Juliette Laplante sur Kreta "
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691597222294192172, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 703505144921708241, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 703505144921708241, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.000030518
+      objectReference: {fileID: 0}
+    - target: {fileID: 703505144921708241, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -0.050323
+      objectReference: {fileID: 0}
+    - target: {fileID: 703505144921708241, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 4.399994
+      objectReference: {fileID: 0}
+    - target: {fileID: 7065824142101282862, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2147424716843450015, guid: e9186fb600da47c44a345f753f852184,
         type: 3}
       propertyPath: m_Name
