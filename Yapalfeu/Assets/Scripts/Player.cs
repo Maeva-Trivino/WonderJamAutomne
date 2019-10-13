@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
         if (action != null)
         {
             Text text = popup.GetComponentInChildren<Text>();
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.GetComponentInChildren<Renderer>().bounds.size.y/2));
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.GetComponentInChildren<Renderer>().bounds.size.y));
 
             if (action == currentAction)
             {
