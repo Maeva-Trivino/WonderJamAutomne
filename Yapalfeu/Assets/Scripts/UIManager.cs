@@ -6,18 +6,20 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    private Text nbSeedText,
-        nbLevelText,
-        nbTreeText,
-        timerText;
+    private Text nbSeedText = null,
+        nbLevelText = null,
+        nbTreeText = null,
+        timerText = null;
     [SerializeField]
-    private Image bucketImg;
+    private Image bucketImg = null;
     [SerializeField]
     private float limitTime = 120;
     [SerializeField]
-    private Sprite emptyBucketSprite;
+    private Sprite emptyBucketSprite = null;
     [SerializeField]
-    private Sprite filledBucketSprite;
+    private Sprite filledBucketSprite = null;
+    [SerializeField]
+    private AudioSource themeSound;
 
     private int nbActualTree;    
     private int nbGoalTree = 5;//
@@ -32,7 +34,8 @@ public class UIManager : MonoBehaviour
         instance = this;
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
-        UpdateSeeds(0);
+        bucketImg.color = new Color(1f, 1f, 1f, .5f);
+        themeSound.Play();
     }
 
     // Update is called once per frame
@@ -68,7 +71,7 @@ public class UIManager : MonoBehaviour
     {
         level = newLevel;
         nbGoalTree = newNbGoalTree;
-        nbLevelText.text = "Niv " + level + ":";
+        nbLevelText.text = "Niv " + level + " :";
         nbTreeText.text = nbActualTree + "/" + nbGoalTree;
     }
 
@@ -91,19 +94,23 @@ public class UIManager : MonoBehaviour
     public void EmptyBucket()
     {
         bucketImg.sprite = emptyBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
     }
     public void FilledBucket()
     {
         bucketImg.sprite = filledBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
     }
 
     public void DropBucket()
     {
-        bucketImg.sprite = null;
+        bucketImg.sprite = emptyBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, .5f);
     }
 
     public void PickUpBucket(bool isFilled)
     {
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
         bucketImg.sprite = isFilled ? filledBucketSprite : emptyBucketSprite;
     }
 }

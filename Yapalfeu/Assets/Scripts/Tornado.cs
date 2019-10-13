@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tornado : Hazard
+public class Tornado
 {
 
 
-    public void Triggerhazard()
+    public bool Triggerhazard()
     {
         List<ForestTree> seedTrees = new List<ForestTree>();
         System.Random number = new System.Random();
@@ -18,7 +18,15 @@ public class Tornado : Hazard
                 seedTrees.Add(t);
             }
         }
-        seedTrees[number.Next(0, seedTrees.Count)].RemoveSeed();
+        if (seedTrees.Count > 0)
+        {
+            HazardAnimationTornado.instance.Trigger(seedTrees);
+            return true;
+        }else
+        {
+            return false;
+        }
+
     }
 
 

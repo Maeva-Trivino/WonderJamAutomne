@@ -11,7 +11,7 @@ public class ForestTree : MonoBehaviour, Interactive
         PLANTED_WET,
         YOUNG_DRY,
         YOUNG_WET,
-        MATURE, // TODO when do we drop seeds?
+        MATURE,
         BURNT
     }
 
@@ -20,9 +20,18 @@ public class ForestTree : MonoBehaviour, Interactive
     [SerializeField]
     private static float
         plantedGrowDuration = 3f,
-        youngGrowDuration = 3f,
-        seedGrowDuration = 10f,
-        burnDuration = 3f;
+        youngGrowDuration = 5f,
+        seedGrowDuration = 8f,
+        burnDuration = 8f;
+
+    #region SoundEffects
+    //Sound of growing tree
+    [SerializeField]
+    private AudioSource growTreeSound;
+    //Sound of burning tree
+    [SerializeField]
+    private AudioSource burningTreeSound;
+    #endregion
     #endregion
 
     #region Private
@@ -32,18 +41,29 @@ public class ForestTree : MonoBehaviour, Interactive
 
     // Négatif s'il ne brûle pas
     private float burning;
+
+    private SpriteRenderer renderer;
+    private Animator animator;
+
     #endregion
 
     #region Static
     public static List<ForestTree> trees = new List<ForestTree>();
     #endregion
-
     #endregion
-
     // Start is called before the first frame update
     void Start()
     {
-        ChangeState(State.SOIL);
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+
+        animator = GetComponentInChildren<Animator>();
+
+        if (Random.Range(0, 1000) < 750)
+            ChangeState(State.SOIL);
+        else
+            ChangeState(State.BURNT);
+
         burning = -1;
 
         trees.Add(this);
@@ -58,7 +78,14 @@ public class ForestTree : MonoBehaviour, Interactive
 
             if (burning >= burnDuration)
             {
-                ChangeState(State.BURNT);
+                if(state == State.MATURE)
+                {
+                    ChangeState(State.BURNT);
+                }
+                else
+                {
+                    ChangeState(State.SOIL);
+                }
                 UIManager.instance.DeleteTree();
             }
         }
@@ -69,15 +96,24 @@ public class ForestTree : MonoBehaviour, Interactive
         {
             case State.PLANTED_WET:
                 if (stateDuration >= plantedGrowDuration)
+                {
+                    growTreeSound.Play();
                     ChangeState(State.YOUNG_DRY);
+                }
                 break;
             case State.YOUNG_WET:
                 if (stateDuration >= youngGrowDuration)
                 {
+                    growTreeSound.Play();
                     ChangeState(State.MATURE);
                     UIManager.instance.AddTree();
                 }
-
+                break;
+            case State.MATURE:
+                if (HasSeed())
+                    animator.SetBool("hasSeed", true);
+                else
+                    animator.SetBool("hasSeed", false);
                 break;
         }
     }
@@ -86,26 +122,75 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
-        if (state == State.YOUNG_DRY || state == State.YOUNG_WET || state == State.MATURE)
+
+        if (s == State.SOIL || s == State.BURNT)
+        {
+            StopBurning();
+        }
+        
+        if (state != State.SOIL)
+        {
             GetComponent<Collider2D>().isTrigger = false;
+            renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        }
         else
+        {
             GetComponent<Collider2D>().isTrigger = true;
+            renderer.sortingOrder = -32768;
+        }
+
+        switch (state)
+        {
+            case State.SOIL:
+                animator.SetInteger("growState", 0);
+                break;
+            case State.PLANTED_DRY:
+            case State.PLANTED_WET:
+                animator.SetInteger("growState", 1);
+                break;
+            case State.YOUNG_DRY:
+            case State.YOUNG_WET:
+                animator.SetInteger("growState", 2);
+                break;
+            case State.MATURE:
+                animator.SetInteger("growState", 3);
+                break;
+            case State.BURNT:
+                animator.SetInteger("growState", 4);
+                break;
+        }
     }
 
     public void Select()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+        renderer.material.SetInt("_OutlineEnabled", 1);
+        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        renderer.material.SetInt("_OutlineEnabled", 0);
+        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()
     {
         return state == State.MATURE && stateDuration >= seedGrowDuration;
     }
+
+    private bool BurnSeed()
+    {
+        if (HasSeed())
+        {
+            stateDuration = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool RemoveSeed()
     {
         if(HasSeed())
@@ -124,9 +209,9 @@ public class ForestTree : MonoBehaviour, Interactive
         return burning >= 0;
     }
 
-    private void StopBurning()
+    public bool IsBurnable()
     {
-        burning = -1;
+        return state != State.BURNT && state != State.SOIL && state != State.PLANTED_DRY && state != State.PLANTED_WET ;
     }
 
     public bool IsDrownable()
@@ -146,12 +231,12 @@ public class ForestTree : MonoBehaviour, Interactive
             return false;
         }
     }
-    public Action GetAction(Player player)
+    public UserAction GetAction(Player player)
     {
         if (IsBurning())
         {
             if (player.HasFilledBucket())
-                return new Action("Éteindre", Button.A, null, 0, () => { if (player.WaterPlant()) StopBurning(); });
+                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.ExtinguishFire()) StopBurning(); });
         }
         else
         {
@@ -160,7 +245,7 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 case State.SOIL:
                     if (player.HasSeed())
-                        return new Action("Planter", Button.A, null, 0, () =>
+                        return new UserAction("Planter", Button.A, null, 0, () =>
                         {
                             if (player.PlantSeed())
                                 ChangeState(State.PLANTED_DRY);
@@ -168,28 +253,28 @@ public class ForestTree : MonoBehaviour, Interactive
                     break;
                 case State.PLANTED_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, () =>
+                        return new UserAction("Arroser", Button.A, null, 0, () =>
                         {
                             if (player.WaterPlant()) ChangeState(State.PLANTED_WET);
                         });
                     break;
                 case State.YOUNG_DRY:
                     if (player.HasFilledBucket())
-                        return new Action("Arroser", Button.A, null, 0, () =>
+                        return new UserAction("Arroser", Button.A, null, 0, () =>
                         {
                             if (player.WaterPlant()) ChangeState(State.YOUNG_WET);
                         });
                     break;
                 case State.MATURE:
                     if (HasSeed())
-                        return new Action("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
+                        return new UserAction("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
                         {
                             player.HarvestSeed();
                             stateDuration = 0;
                         });
                     break;
                 case State.BURNT:
-                    return new Action("Arracher", Button.A, null, 0, () => ChangeState(State.SOIL));
+                    return new UserAction("Arracher", Button.A, null, 0, () => ChangeState(State.SOIL));
             }
         }
 
@@ -198,9 +283,12 @@ public class ForestTree : MonoBehaviour, Interactive
 
     public bool SetOnFire()
     {
-        if (!IsBurning())
+        if (!IsBurning() && IsBurnable())
         {
+            burningTreeSound.Play();
             burning = 0;
+            BurnSeed();
+            animator.SetBool("isBurning", true);
             return true;
         }
         else
@@ -208,5 +296,10 @@ public class ForestTree : MonoBehaviour, Interactive
             return false;
         }
         
+    }
+    public void StopBurning()
+    {
+        burning = -1;
+        animator.SetBool("isBurning", false);
     }
 }

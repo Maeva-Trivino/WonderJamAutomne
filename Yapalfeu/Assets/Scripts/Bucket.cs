@@ -9,30 +9,47 @@ public class Bucket : MonoBehaviour, Interactive
         EMPTY,
         FILLED
     }
+    
+    [SerializeField]
+    private Sprite bucket_sprite_empty = null;
+    [SerializeField]
+    private Sprite bucket_sprite_filled = null;
 
-    State state;
+    private State state;
+
+    private SpriteRenderer renderer;
+    [SerializeField]
+    private AudioSource fillBucket;
+
+    //Sound of getting the bucket
+    [SerializeField]
+    private AudioSource getBucketSound;
 
     // Start is called before the first frame update
     void Start()
     {
         state = State.EMPTY;
-
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        renderer.sprite = bucket_sprite_empty;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
     }
 
     public void Empty()
     {
         state = State.EMPTY;
+        renderer.sprite = bucket_sprite_empty;
     }
 
     public void Fill()
     {
+        fillBucket.Play();
         state = State.FILLED;
+        renderer.sprite = bucket_sprite_filled;
     }
 
     public bool isFilled()
@@ -42,19 +59,21 @@ public class Bucket : MonoBehaviour, Interactive
 
     public void Select()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+        renderer.material.SetInt("_OutlineEnabled", 1);
+        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        renderer.material.SetInt("_OutlineEnabled", 0);
+        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
-    public Action GetAction(Player player)
+    public UserAction GetAction(Player player)
     {
         if (!player.HasBucket())
         {
-            return new Action("Prendre", Button.A, null, 0, () =>
+            return new UserAction("Prendre", Button.A, null, 0, () =>
             {
                 if (player.PickUpBucket(this)) 
                     gameObject.SetActive(false);
@@ -62,7 +81,24 @@ public class Bucket : MonoBehaviour, Interactive
         }
         else
         {
-            return null;
+            return new UserAction("Echanger", Button.A, null, 0, () =>
+            {
+                if (player.GetBucket().state != this.state)
+                {
+                    if (this.isFilled())
+                    {
+                        this.Empty();
+                        player.FillBucket();
+                    } else
+                    {
+                        this.Fill();
+                        player.WaterPlant();
+                    }
+                }
+                
+             
+
+            }, 0);
         }
     }
 

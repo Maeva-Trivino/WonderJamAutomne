@@ -10,9 +10,28 @@ public class Player : MonoBehaviour
     // Translation speed of the player
     [SerializeField]
     private float speed = 1f;
-
     [SerializeField]
     private GameObject popup = null;
+    [SerializeField]
+    private GameObject bucket_on_head = null;
+
+    #region SoundEffects
+    // Sound of getting or putting on the ground the bucket
+    [SerializeField]
+    private AudioSource getBucket;
+    // Sound of getting a seed
+    [SerializeField]
+    private AudioSource getSeed;
+    // Sound of water plant
+    [SerializeField]
+    private AudioSource waterPlantSound;
+    // Sound of extinguish tree
+    [SerializeField]
+    private AudioSource exstinguishTreeSound;
+    //Sound of planting a seed
+    [SerializeField]
+    private AudioSource plantSeedSound;
+    #endregion
     #endregion
 
     #region Private
@@ -23,11 +42,14 @@ public class Player : MonoBehaviour
     private GameObject selected;
     private int seedCount;
     private Bucket bucket;
-    private Action currentAction;
+    private UserAction currentAction;
+    private Vector2 direction;
+    private float dashTimeRemaining;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
+    private CircleCollider2D _collider, _trigger;
     #endregion
     #endregion
 
@@ -36,17 +58,28 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        seedCount = 1;
+        seedCount = 10;
         inRange = new HashSet<GameObject>();
         updatePopup(null);
+        UIManager.instance.UpdateSeeds(seedCount);
+
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
+        List<CircleCollider2D> cs = new List<CircleCollider2D>(GetComponents<CircleCollider2D>());
+        _trigger = cs.Find(c => c.isTrigger);
+
+        dashTimeRemaining = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+        renderers[0].sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        renderers[1].sortingOrder = renderers[0].sortingOrder + 1;
+
         if (currentAction != null)
         {
             if (InputManager.GetButton(currentAction.button))
@@ -59,12 +92,32 @@ public class Player : MonoBehaviour
                 currentAction = null;
             }
         }
-            
+
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
         Vector3 input = Vector3.zero;
-        if (currentAction == null) 
-            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
+        if (currentAction == null && !IsDashing())
+        {
+            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical));
+            if(input.magnitude > 1)
+                input.Normalize();
+
+            if (input != Vector3.zero && InputManager.GetButtonDown(Button.X))
+                dashTimeRemaining = 0.10f;
+        }
+        if (input != Vector3.zero)
+            direction = input;
+
+        if (IsDashing())
+        {
+            input = direction*2.5f;
+            dashTimeRemaining -= Time.deltaTime;
+        }
+
         _animator.SetBool("IsWalking", input.magnitude > .1f);
+        _animator.SetBool("Walk_back", InputManager.GetAxis(Axis.Vertical) > .2f);
+        _animator.SetBool("Walk_front", InputManager.GetAxis(Axis.Vertical) < -.2f);
+        _animator.SetBool("Walk_right", InputManager.GetAxis(Axis.Horizontal) > .2f);
+        _animator.SetBool("Walk_left", InputManager.GetAxis(Axis.Horizontal) < -.2f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
 
@@ -76,41 +129,51 @@ public class Player : MonoBehaviour
                 float distanceMin = float.PositiveInfinity;
                 GameObject nearest = null;
 
+                float distanceMinWithAction = float.PositiveInfinity;
+                GameObject nearestWithAction = null;
+                UserAction nearestAction = null;
+
                 foreach (GameObject o in inRange)
                 {
                     float distance = (o.transform.position - transform.position).magnitude;
+                    UserAction action = o.GetComponent<Interactive>().GetAction(this);
+
                     if (distance < distanceMin)
                     {
                         distanceMin = distance;
                         nearest = o;
                     }
+
+                    if (action != null && distance < distanceMinWithAction)
+                    {
+                        distanceMinWithAction = distance;
+                        nearestWithAction = o;
+                        nearestAction = action;
+                    }
                 }
 
-                if (nearest != selected)
-                {
-                    // On désélectionne l'objet sélectionné auparavant
-                    if (selected != null)
-                        selected.GetComponent<Interactive>().Deselect();
-                    selected = nearest;
-                }
+                if (nearestWithAction != null)
+                    nearest = nearestWithAction;
+
+                // On désélectionne l'objet sélectionné auparavant
+                if (selected != null)
+                    selected.GetComponent<Interactive>().Deselect();
+                selected = nearest;
 
                 Interactive interactive = selected.GetComponent<Interactive>();
                 // On le sélectionne (mise en surbrillance)
                 interactive.Select();
 
-                // On affiche l'action correspondante
-                Action action = interactive.GetAction(this);
-
-                if (action != null && InputManager.GetButtonDown(action.button))
+                if (nearestAction != null && !IsDashing() && InputManager.GetButtonDown(nearestAction.button))
                 {
-                    currentAction = action;
+                    currentAction = nearestAction;
                     currentAction.Do();
 
                     if (currentAction.IsDone())
                         currentAction = null;
                 }
 
-                updatePopup(action);
+                updatePopup(nearestAction);
             }
             else
             {
@@ -130,29 +193,34 @@ public class Player : MonoBehaviour
             DropBucket();
     }
 
-    private void updatePopup(Action action)
+    private void updatePopup(UserAction action)
     {
         if (action != null)
         {
-            Text text = popup.GetComponentInChildren<Text>();
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            screenPos.y += 45;
+            Text text = popup.GetComponentsInChildren<Text>()[0];
+            Text button = popup.GetComponentsInChildren<Text>()[1];
+            Text combos = popup.GetComponentsInChildren<Text>()[2];
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.GetComponentInChildren<Renderer>().bounds.size.y));
 
             if (action == currentAction)
             {
                 if (action.combos == null)
                 {
                     text.text = "";
+                    button.text = "";
+                    combos.text = "";
                 }
                 else
                 {
                     text.text = "";
+                    combos.text = "";
                     foreach (Button b in action.combos)
                     {
-                        text.text += InputManager.GetButtonName(b) + " ";
+                        combos.text += InputManager.GetButtonName(b) + " ";
                     }
 
-                    text.text.TrimEnd();
+                    combos.text = combos.text.Remove(combos.text.Length - 1);
+                    button.text = "";
                 }
 
                 Slider slider = popup.GetComponentInChildren<Slider>();
@@ -162,7 +230,10 @@ public class Player : MonoBehaviour
             }
             else
             {
-                text.text = "(" + InputManager.GetButtonName(action.button) + ") " + action.name;
+                text.text = action.name;
+                text.fontSize = 12;
+                button.text = InputManager.GetButtonName(action.button);
+                combos.text = "";
                 popup.GetComponentInChildren<Slider>().gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
 
@@ -210,6 +281,7 @@ public class Player : MonoBehaviour
     {
         if (HasSeed())
         {
+            plantSeedSound.Play();
             seedCount--;
             UIManager.instance.UpdateSeeds(seedCount);
             return true;
@@ -239,8 +311,8 @@ public class Player : MonoBehaviour
     {
         if (HasFilledBucket())
         {
-            UIManager.instance.EmptyBucket();
-            bucket.Empty();
+            waterPlantSound.Play();
+            EmptyBucket();
             return true;
         }
         else
@@ -249,8 +321,30 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool ExtinguishFire()
+    {
+        if (HasFilledBucket())
+        {
+            exstinguishTreeSound.Play();
+            EmptyBucket();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void EmptyBucket()
+    {
+        UIManager.instance.EmptyBucket();
+        bucket.Empty();
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
+    }
+
     public void HarvestSeed()
     {
+        getSeed.Play();
         seedCount++;
         UIManager.instance.UpdateSeeds(seedCount);
     }
@@ -259,10 +353,12 @@ public class Player : MonoBehaviour
     {
         if (!HasBucket())
         {
+            getBucket.Play();
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
             UIManager.instance.PickUpBucket(this.bucket.isFilled());
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -277,6 +373,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.FilledBucket();
             bucket.Fill();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -287,11 +384,13 @@ public class Player : MonoBehaviour
 
     public bool DropBucket()
     {
-        if (HasBucket())
+        if (HasBucket() && IsDropAllowed())
         {
+            getBucket.Play();
             // TODO : poser à côté du joueur et non sur le joueur
-            bucket.SetOnGround(transform.position);
+            bucket.SetOnGround(transform.position + (Vector3)direction);
             UIManager.instance.DropBucket();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
             bucket = null;
             return true;
         }
@@ -299,6 +398,34 @@ public class Player : MonoBehaviour
         {
             return false;
         }
+    }
+    public Bucket GetBucket()
+    {
+        return bucket;
+    }
+
+    #endregion
+
+    #region Private
+    private bool IsDashing()
+    {
+        return dashTimeRemaining > 0;
+    }
+
+    private bool IsDropAllowed()
+    {
+        RaycastHit2D[] hits = new RaycastHit2D[2];
+        Physics2D.Raycast(transform.position, direction, new ContactFilter2D(), hits);
+
+        // If it hits something...
+        if (hits[1].collider != null)
+        {
+            // Calculate the distance from the surface and the "error" relative
+            // to the floating height.
+            float distance = ((Vector3) hits[1].point - transform.position).magnitude;
+            return distance > _trigger.radius;
+        }
+        return true;
     }
     #endregion
     #endregion

@@ -18,20 +18,20 @@ public class WaterSource : MonoBehaviour, Interactive
     }
     public void Select()
     {
-        gameObject.GetComponent<Tilemap>().color = Color.blue;
+
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<Tilemap>().color = Color.white;
+
     }
 
-    public Action GetAction(Player player)
+    public UserAction GetAction(Player player)
     {
         // TODO : ajuster le temps pour remplir le seau
         if (player.HasEmptyBucket())
         { 
-            return new Action("Remplir", Button.A, new List<Button>() {Button.UP, Button.DOWN }, 3, () => player.FillBucket());
+            return new UserAction("Remplir", Button.A, new List<Button>() {Button.UP, Button.DOWN }, 3, () => player.FillBucket());
         }
         else
         {
