@@ -21,7 +21,7 @@ public class ForestTree : MonoBehaviour, Interactive
     private static float
         plantedGrowDuration = 3f,
         youngGrowDuration = 5f,
-        seedGrowDuration = 8f,
+        seedGrowDuration = 10f,
         burnDuration = 8f;
 
     #region SoundEffects
