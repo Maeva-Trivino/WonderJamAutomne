@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image bucketImg = null;
     [SerializeField]
-    private float limitTime = 120;
+    private float limitTime = 180;
     [SerializeField]
     private Sprite emptyBucketSprite = null;
     [SerializeField]
