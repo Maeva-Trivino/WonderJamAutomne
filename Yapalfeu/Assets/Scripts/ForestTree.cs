@@ -32,6 +32,10 @@ public class ForestTree : MonoBehaviour, Interactive
 
     // Négatif s'il ne brûle pas
     private float burning;
+
+    [SerializeField]
+    private Sprite soil, planted, young, bottomMature, topMature, burnt;
+
     #endregion
 
     #region Static
@@ -84,19 +88,42 @@ void Start()
     {
         stateDuration = 0;
         state = s;
-        if(s == State.SOIL)
+        if (s == State.SOIL)
         {
-            gameObject.SetActive(false);
+            GetComponent<SpriteRenderer>().sprite = soil;
+            GetComponent<Collider2D>().isTrigger = true;
+            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+            transform.localScale = new Vector3(1, 1, 1);
+
+
         }
-        else
+        else if (s == State.PLANTED_DRY)
         {
-            gameObject.SetActive(true);
-            if (s == State.YOUNG_DRY)
-            {
-                GetComponent<Collider2D>().isTrigger = false;
-            }
+            GetComponent<Collider2D>().isTrigger = false;
+            GetComponent<SpriteRenderer>().sprite = planted;
         }
-            
+        else if (s == State.YOUNG_DRY)
+        {
+            GetComponent<SpriteRenderer>().sprite = young;
+        }
+        else if (s == State.MATURE)
+        {
+
+            GetComponent<SpriteRenderer>().sprite = bottomMature;
+            transform.localScale = new Vector3(2,2,1) ;
+            GetComponent<CircleCollider2D>().radius=0.25f;
+
+            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = topMature;
+
+        }
+        else if (s == State.BURNT)
+        {
+            GetComponent<SpriteRenderer>().sprite = burnt;
+            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+            transform.localScale = new Vector3(1, 1, 1);
+
+        }
+
     }
 
     public void Select()

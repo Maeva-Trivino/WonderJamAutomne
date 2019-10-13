@@ -32,7 +32,6 @@ public class UIManager : MonoBehaviour
         instance = this;
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
-        UpdateSeeds(0);
     }
 
     // Update is called once per frame

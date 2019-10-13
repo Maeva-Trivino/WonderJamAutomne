@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
         seedCount = 1;
         inRange = new List<GameObject>();
         updatePopup(null);
+        UIManager.instance.UpdateSeeds(seedCount);
+
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
