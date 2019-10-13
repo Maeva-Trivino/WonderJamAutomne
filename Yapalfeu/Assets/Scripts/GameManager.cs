@@ -39,20 +39,22 @@ public class GameManager : MonoBehaviour
         else if(!isHidden && !isCreditOpen && InputManager.GetButtonDown(Button.X))
         {
             isCreditOpen = true;
-            transform.GetChild(0).GetComponent<Text>().enabled = false;
+            transform.GetChild(0).GetComponent<Image>().enabled = false;
             transform.GetChild(1).GetComponent<Text>().enabled = false;
             transform.GetChild(2).GetComponent<Text>().enabled = false;
-            transform.GetChild(3).GetComponent<Text>().enabled = true;
+            transform.GetChild(3).GetComponent<Text>().enabled = false;
             transform.GetChild(4).GetComponent<Text>().enabled = true;
+            transform.GetChild(5).GetComponent<Text>().enabled = true;
         }
         else if (!isHidden && isCreditOpen && InputManager.GetButtonDown(Button.X))
         {
             isCreditOpen = false;
-            transform.GetChild(0).GetComponent<Text>().enabled = true;
+            transform.GetChild(0).GetComponent<Image>().enabled = true;
             transform.GetChild(1).GetComponent<Text>().enabled = true;
             transform.GetChild(2).GetComponent<Text>().enabled = true;
-            transform.GetChild(3).GetComponent<Text>().enabled = false;
+            transform.GetChild(3).GetComponent<Text>().enabled = true;
             transform.GetChild(4).GetComponent<Text>().enabled = false;
+            transform.GetChild(5).GetComponent<Text>().enabled = false;
         }
     }
 
