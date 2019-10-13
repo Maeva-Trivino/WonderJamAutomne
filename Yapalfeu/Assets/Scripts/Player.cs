@@ -10,15 +10,16 @@ public class Player : MonoBehaviour
     // Translation speed of the player
     [SerializeField]
     private float speed = 1f;
-
     [SerializeField]
     private GameObject popup = null;
+    [SerializeField]
+    private GameObject bucket_on_head = null;
     #endregion
 
     #region Private
     private PlayerState state;
     // Liste des objects à portée d'intéraction
-    private List<GameObject> inRange;
+    private HashSet<GameObject> inRange;
     // Cible de l'intéraction
     private GameObject selected;
     private int seedCount;
@@ -37,13 +38,14 @@ public class Player : MonoBehaviour
     void Start()
     {
         seedCount = 1;
-        inRange = new List<GameObject>();
+        inRange = new HashSet<GameObject>();
         updatePopup(null);
         UIManager.instance.UpdateSeeds(seedCount);
 
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
     }
 
     // Update is called once per frame
@@ -67,6 +69,10 @@ public class Player : MonoBehaviour
         if (currentAction == null) 
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
+        _animator.SetBool("Walk_back", InputManager.GetAxis(Axis.Vertical) > .2f);
+        _animator.SetBool("Walk_front", InputManager.GetAxis(Axis.Vertical) < -.2f);
+        _animator.SetBool("Walk_right", InputManager.GetAxis(Axis.Horizontal) > .2f);
+        _animator.SetBool("Walk_left", InputManager.GetAxis(Axis.Horizontal) < -.2f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
 
@@ -243,6 +249,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.EmptyBucket();
             bucket.Empty();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -265,6 +272,7 @@ public class Player : MonoBehaviour
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
             UIManager.instance.PickUpBucket(this.bucket.isFilled());
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -279,6 +287,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.FilledBucket();
             bucket.Fill();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -294,6 +303,7 @@ public class Player : MonoBehaviour
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position);
             UIManager.instance.DropBucket();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
             bucket = null;
             return true;
         }

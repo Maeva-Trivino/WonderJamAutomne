@@ -91,7 +91,6 @@ void Start()
         if (s == State.SOIL)
         {
             GetComponent<SpriteRenderer>().sprite = soil;
-            GetComponent<Collider2D>().isTrigger = true;
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             transform.localScale = new Vector3(1, 1, 1);
 
@@ -99,7 +98,6 @@ void Start()
         }
         else if (s == State.PLANTED_DRY)
         {
-            GetComponent<Collider2D>().isTrigger = false;
             GetComponent<SpriteRenderer>().sprite = planted;
         }
         else if (s == State.YOUNG_DRY)
@@ -124,6 +122,10 @@ void Start()
 
         }
 
+        if (state != State.SOIL)
+            GetComponent<Collider2D>().isTrigger = false;
+        else
+            GetComponent<Collider2D>().isTrigger = true;
     }
 
     public void Select()
@@ -232,7 +234,7 @@ void Start()
 
     public bool SetOnFire()
     {
-        if (burning < 0)
+        if (!IsBurning())
         {
             burning = 0;
             return true;
