@@ -339,7 +339,7 @@ public class Player : MonoBehaviour
     {
         UIManager.instance.EmptyBucket();
         bucket.Empty();
-        bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
     }
 
     public void HarvestSeed()
