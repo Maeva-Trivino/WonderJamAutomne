@@ -13,7 +13,7 @@ public class Tornado
 
         foreach (ForestTree t in ForestTree.trees)
         {
-            if (t.HasSeed())
+            if (t.HasSeed() || t.IsPlant())
             {
                 seedTrees.Add(t);
             }
