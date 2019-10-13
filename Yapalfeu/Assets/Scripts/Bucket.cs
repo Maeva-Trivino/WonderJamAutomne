@@ -18,6 +18,8 @@ public class Bucket : MonoBehaviour, Interactive
     private State state;
 
     private SpriteRenderer renderer;
+    [SerializeField]
+    private AudioSource fillBucket;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,7 @@ public class Bucket : MonoBehaviour, Interactive
 
     public void Fill()
     {
+        fillBucket.Play();
         state = State.FILLED;
         renderer.sprite = bucket_sprite_filled;
     }

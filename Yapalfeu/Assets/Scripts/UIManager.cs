@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
     private Sprite emptyBucketSprite = null;
     [SerializeField]
     private Sprite filledBucketSprite = null;
+    [SerializeField]
+    private AudioSource themeSound;
 
     private int nbActualTree;    
     private int nbGoalTree = 5;//
@@ -33,6 +35,8 @@ public class UIManager : MonoBehaviour
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
         bucketImg.color = new Color(1f, 1f, 1f, .5f);
+        bucketImg.enabled = false;
+        themeSound.Play();s
     }
 
     // Update is called once per frame
