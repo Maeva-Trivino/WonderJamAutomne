@@ -15,9 +15,23 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject bucket_on_head = null;
 
+    #region SoundEffects
     // Sound of getting or putting on the ground the bucket
     [SerializeField]
     private AudioSource getBucket;
+    // Sound of getting a seed
+    [SerializeField]
+    private AudioSource getSeed;
+    // Sound of water plant
+    [SerializeField]
+    private AudioSource waterPlantSound;
+    // Sound of extinguish tree
+    [SerializeField]
+    private AudioSource exstinguishTreeSound;
+    //Sound of planting a seed
+    [SerializeField]
+    private AudioSource plantSeedSound;
+    #endregion
     #endregion
 
     #region Private
@@ -267,6 +281,7 @@ public class Player : MonoBehaviour
     {
         if (HasSeed())
         {
+            plantSeedSound.Play();
             seedCount--;
             UIManager.instance.UpdateSeeds(seedCount);
             return true;
@@ -296,9 +311,8 @@ public class Player : MonoBehaviour
     {
         if (HasFilledBucket())
         {
-            UIManager.instance.EmptyBucket();
-            bucket.Empty();
-            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
+            waterPlantSound.Play();
+            EmptyBucket();
             return true;
         }
         else
@@ -307,8 +321,30 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool ExtinguishFire()
+    {
+        if (HasFilledBucket())
+        {
+            exstinguishTreeSound.Play();
+            EmptyBucket();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void EmptyBucket()
+    {
+        UIManager.instance.EmptyBucket();
+        bucket.Empty();
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
+    }
+
     public void HarvestSeed()
     {
+        getSeed.Play();
         seedCount++;
         UIManager.instance.UpdateSeeds(seedCount);
     }

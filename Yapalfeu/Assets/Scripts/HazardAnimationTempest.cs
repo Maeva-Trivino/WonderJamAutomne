@@ -18,6 +18,10 @@ public class HazardAnimationTempest : MonoBehaviour
     private List<ForestTree> treesToDrown;
     private List<ForestTree> burnableTrees;
 
+    //Sound of the wave
+    [SerializeField]
+    private AudioSource waveSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,5 +84,6 @@ public class HazardAnimationTempest : MonoBehaviour
         Reset();
         GetComponent<SpriteRenderer>().sprite = sprite;
         mooving = true;
+        waveSound.Play();
     }
 }

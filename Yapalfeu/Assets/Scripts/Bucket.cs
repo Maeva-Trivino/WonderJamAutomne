@@ -73,7 +73,6 @@ public class Bucket : MonoBehaviour, Interactive
     {
         if (!player.HasBucket())
         {
-            //getBucketSound.Play();
             return new UserAction("Prendre", Button.A, null, 0, () =>
             {
                 if (player.PickUpBucket(this)) 
@@ -89,7 +88,6 @@ public class Bucket : MonoBehaviour, Interactive
     // Pose le seau au sol à l'emplacement passé en paramètres
     public void SetOnGround(Vector3 position)
     {
-        //getBucketSound.Play();
         transform.position = position;
         gameObject.SetActive(true);
     }

@@ -23,6 +23,15 @@ public class ForestTree : MonoBehaviour, Interactive
         youngGrowDuration = 5f,
         seedGrowDuration = 8f,
         burnDuration = 8f;
+
+    #region SoundEffects
+    //Sound of growing tree
+    [SerializeField]
+    private AudioSource growTreeSound;
+    //Sound of burning tree
+    [SerializeField]
+    private AudioSource burningTreeSound;
+    #endregion
     #endregion
 
     #region Private
@@ -87,11 +96,15 @@ public class ForestTree : MonoBehaviour, Interactive
         {
             case State.PLANTED_WET:
                 if (stateDuration >= plantedGrowDuration)
+                {
+                    growTreeSound.Play();
                     ChangeState(State.YOUNG_DRY);
+                }
                 break;
             case State.YOUNG_WET:
                 if (stateDuration >= youngGrowDuration)
                 {
+                    growTreeSound.Play();
                     ChangeState(State.MATURE);
                     UIManager.instance.AddTree();
                 }
@@ -223,7 +236,7 @@ public class ForestTree : MonoBehaviour, Interactive
         if (IsBurning())
         {
             if (player.HasFilledBucket())
-                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.WaterPlant()) StopBurning(); });
+                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.ExtinguishFire()) StopBurning(); });
         }
         else
         {
@@ -272,6 +285,7 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         if (!IsBurning() && IsBurnable())
         {
+            burningTreeSound.Play();
             burning = 0;
             BurnSeed();
             animator.SetBool("isBurning", true);
