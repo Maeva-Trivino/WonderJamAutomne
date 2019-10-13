@@ -175,19 +175,7 @@ void Start()
             return false;
         }
     }
-    public bool WindSeed()
-    {
-        if (HasSeed())
-        {
-            stateDuration = 0;
-            SetSprite();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+
     public bool RemoveSeed()
     {
         if(HasSeed())

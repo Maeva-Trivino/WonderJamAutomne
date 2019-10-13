@@ -41,7 +41,7 @@ public class HazardAnimationTornado : MonoBehaviour
             {
                 if (transform.position.x > t.gameObject.transform.position.x)
                 {
-                    t.WindSeed();
+                    t.RemoveSeed();
                     treesToWind.Remove(t);
 
                 }
