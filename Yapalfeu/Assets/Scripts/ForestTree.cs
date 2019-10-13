@@ -86,7 +86,7 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
-        if (state == State.PLANTED_DRY || state == State.PLANTED_WET || state == State.YOUNG_DRY || state == State.YOUNG_WET || state == State.MATURE)
+        if (state == State.YOUNG_DRY || state == State.YOUNG_WET || state == State.MATURE)
             GetComponent<Collider2D>().isTrigger = false;
         else
             GetComponent<Collider2D>().isTrigger = true;
