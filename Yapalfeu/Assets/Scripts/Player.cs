@@ -167,7 +167,9 @@ public class Player : MonoBehaviour
     {
         if (action != null)
         {
-            Text text = popup.GetComponentInChildren<Text>();
+            Text text = popup.GetComponentsInChildren<Text>()[0];
+            Text button = popup.GetComponentsInChildren<Text>()[1];
+            Text combos = popup.GetComponentsInChildren<Text>()[2];
             Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.GetComponentInChildren<Renderer>().bounds.size.y));
 
             if (action == currentAction)
@@ -175,18 +177,20 @@ public class Player : MonoBehaviour
                 if (action.combos == null)
                 {
                     text.text = "";
-                    text.fontSize = 12;
+                    button.text = "";
+                    combos.text = "";
                 }
                 else
                 {
                     text.text = "";
+                    combos.text = "";
                     foreach (Button b in action.combos)
                     {
-                        text.text += InputManager.GetButtonName(b) + " ";
+                        combos.text += InputManager.GetButtonName(b) + " ";
                     }
 
-                    text.text = text.text.Remove(text.text.Length - 1);
-                    text.fontSize = 16;
+                    combos.text = combos.text.Remove(combos.text.Length - 1);
+                    button.text = "";
                 }
 
                 Slider slider = popup.GetComponentInChildren<Slider>();
@@ -196,8 +200,10 @@ public class Player : MonoBehaviour
             }
             else
             {
-                text.text = "(" + InputManager.GetButtonName(action.button) + ") " + action.name;
+                text.text = action.name;
                 text.fontSize = 12;
+                button.text = InputManager.GetButtonName(action.button);
+                combos.text = "";
                 popup.GetComponentInChildren<Slider>().gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
 

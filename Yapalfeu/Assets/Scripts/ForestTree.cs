@@ -46,7 +46,12 @@ public class ForestTree : MonoBehaviour, Interactive
 void Start()
     {
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
-        ChangeState(State.SOIL);
+
+        if (Random.Range(0, 1000) < 750)
+            ChangeState(State.SOIL);
+        else
+            ChangeState(State.BURNT);
+
         burning = -1;
 
         trees.Add(this);
