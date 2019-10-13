@@ -28,10 +28,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private AudioSource themeSound;
 
-    private int nbActualTree;
-    private int nbGoalTree = 5;//
-    private int level = 1;//
     private int nbSeeds = 10;
+    private int nbActualTree;    
+    private int nbGoalTree = 1;//
+    private int level = 1;
     private float startTime;
 
     public static UIManager instance;
@@ -56,6 +56,27 @@ public class UIManager : MonoBehaviour
             return;
         float t = Time.time - startTime;
         float seconds = (limitTime - t);
+        if(nbActualTree == nbGoalTree)
+        {
+
+            if(level == 1)
+            {
+                nbGoalTree+=4;
+            }
+            else
+            {
+                nbGoalTree += 5;
+            }
+            
+            level++;
+            if (nbGoalTree > 27)
+            {
+                nbGoalTree = 28;
+            }
+            SetLevel(level,nbGoalTree) ;
+            SetTime(limitTime + limitTime-t);
+        }
+        
         if (seconds >= 100)
         {
             timerText.text = seconds.ToString("f0");
