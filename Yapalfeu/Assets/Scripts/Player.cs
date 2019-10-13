@@ -94,41 +94,51 @@ public class Player : MonoBehaviour
                 float distanceMin = float.PositiveInfinity;
                 GameObject nearest = null;
 
+                float distanceMinWithAction = float.PositiveInfinity;
+                GameObject nearestWithAction = null;
+                UserAction nearestAction = null;
+
                 foreach (GameObject o in inRange)
                 {
                     float distance = (o.transform.position - transform.position).magnitude;
+                    UserAction action = o.GetComponent<Interactive>().GetAction(this);
+
                     if (distance < distanceMin)
                     {
                         distanceMin = distance;
                         nearest = o;
                     }
+
+                    if (action != null && distance < distanceMinWithAction)
+                    {
+                        distanceMinWithAction = distance;
+                        nearestWithAction = o;
+                        nearestAction = action;
+                    }
                 }
 
-                if (nearest != selected)
-                {
-                    // On désélectionne l'objet sélectionné auparavant
-                    if (selected != null)
-                        selected.GetComponent<Interactive>().Deselect();
-                    selected = nearest;
-                }
+                if (nearestWithAction != null)
+                    nearest = nearestWithAction;
+
+                // On désélectionne l'objet sélectionné auparavant
+                if (selected != null)
+                    selected.GetComponent<Interactive>().Deselect();
+                selected = nearest;
 
                 Interactive interactive = selected.GetComponent<Interactive>();
                 // On le sélectionne (mise en surbrillance)
                 interactive.Select();
 
-                // On affiche l'action correspondante
-                UserAction action = interactive.GetAction(this);
-
-                if (action != null && InputManager.GetButtonDown(action.button))
+                if (nearestAction != null && InputManager.GetButtonDown(nearestAction.button))
                 {
-                    currentAction = action;
+                    currentAction = nearestAction;
                     currentAction.Do();
 
                     if (currentAction.IsDone())
                         currentAction = null;
                 }
 
-                updatePopup(action);
+                updatePopup(nearestAction);
             }
             else
             {
