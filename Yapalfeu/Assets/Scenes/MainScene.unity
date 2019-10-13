@@ -3408,6 +3408,16 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6747993747298142955, guid: 2dc391298b566df43b83a5108167cd36,
+        type: 3}
+      propertyPath: fillBucket
+      value: 
+      objectReference: {fileID: 1112623678}
+    - target: {fileID: 6747993747298142955, guid: 2dc391298b566df43b83a5108167cd36,
+        type: 3}
+      propertyPath: getBucketSound
+      value: 
+      objectReference: {fileID: 551140815}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dc391298b566df43b83a5108167cd36, type: 3}
 --- !u!1001 &841969395
@@ -4586,6 +4596,16 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6747993747298142955, guid: 2dc391298b566df43b83a5108167cd36,
+        type: 3}
+      propertyPath: fillBucket
+      value: 
+      objectReference: {fileID: 1112623678}
+    - target: {fileID: 6747993747298142955, guid: 2dc391298b566df43b83a5108167cd36,
+        type: 3}
+      propertyPath: getBucketSound
+      value: 
+      objectReference: {fileID: 551140815}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dc391298b566df43b83a5108167cd36, type: 3}
 --- !u!4 &1198736163 stripped
@@ -10555,6 +10575,11 @@ PrefabInstance:
       propertyPath: fillBucket
       value: 
       objectReference: {fileID: 1112623678}
+    - target: {fileID: 6747993747298142955, guid: 2dc391298b566df43b83a5108167cd36,
+        type: 3}
+      propertyPath: getBucketSound
+      value: 
+      objectReference: {fileID: 551140815}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dc391298b566df43b83a5108167cd36, type: 3}
 --- !u!1 &7955266713374452719
