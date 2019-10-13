@@ -16,6 +16,7 @@ public class HazardAnimationTempest : MonoBehaviour
     public static HazardAnimationTempest instance;
 
     private List<ForestTree> treesToDrown;
+    private List<ForestTree> burnableTrees;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,8 @@ public class HazardAnimationTempest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        System.Random number = new System.Random();
+
         if (mooving)
         {
             transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
@@ -45,8 +48,21 @@ public class HazardAnimationTempest : MonoBehaviour
                     treesToDrown.Remove(t);
                 }
             }
-            if (transform.position.x > 23.5)
+
+            foreach (ForestTree t in burnableTrees)
             {
+                if (t.IsBurning() && transform.position.x > t.gameObject.transform.position.x)
+                {
+                    if (number.Next(1,101) > 50 )
+                    {
+                        t.StopBurning();
+                    }
+                    
+                }
+            }
+            
+            if (transform.position.x > 23.5)
+                {
                 mooving = false;
             }
         }
@@ -57,9 +73,10 @@ public class HazardAnimationTempest : MonoBehaviour
     {
         transform.position = new Vector3(-22.5f, -1.5f, 0f);
     }
-    public void Trigger(List<ForestTree> treesToDrown)
+    public void Trigger(List<ForestTree> treesToDrown, List<ForestTree> burnableTrees)
     {
         this.treesToDrown = treesToDrown;
+        this.burnableTrees = burnableTrees;
         Reset();
         GetComponent<SpriteRenderer>().sprite = sprite;
         mooving = true;
