@@ -20,9 +20,9 @@ public class ForestTree : MonoBehaviour, Interactive
     [SerializeField]
     private static float
         plantedGrowDuration = 3f,
-        youngGrowDuration = 3f,
-        seedGrowDuration = 7f,
-        burnDuration = 4f;
+        youngGrowDuration = 5f,
+        seedGrowDuration = 8f,
+        burnDuration = 8f;
     #endregion
 
     #region Private
@@ -192,6 +192,19 @@ void Start()
         if (HasSeed())
         {
             stateDuration = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public bool WindSeed()
+    {
+        if (HasSeed())
+        {
+            stateDuration = 0;
+            SetSprite();
             return true;
         }
         else

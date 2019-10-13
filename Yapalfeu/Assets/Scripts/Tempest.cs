@@ -20,10 +20,10 @@ public class Tempest : Hazard
         }
         if (drownableTrees.Count > 0)
         {
-            bool b =drownableTrees[number.Next(0, drownableTrees.Count - 1)].Drown();
-            Debug.Log("Un arbre est noyé => " + b);
+            //bool b =drownableTrees[number.Next(0, drownableTrees.Count - 1)].Drown();
+            HazardAnimationTempest.instance.Trigger(drownableTrees);
         }
-            
+
 
     }
 }

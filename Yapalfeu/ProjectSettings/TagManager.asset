@@ -56,3 +56,6 @@ TagManager:
   - name: FrontTree
     uniqueID: 4236490451
     locked: 0
+  - name: Hazard
+    uniqueID: 504200819
+    locked: 0
