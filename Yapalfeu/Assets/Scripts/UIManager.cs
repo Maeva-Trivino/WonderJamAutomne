@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
     {
         level = newLevel;
         nbGoalTree = newNbGoalTree;
-        nbLevelText.text = "Niv " + level + ":";
+        nbLevelText.text = "Niv " + level + " :";
         nbTreeText.text = nbActualTree + "/" + nbGoalTree;
     }
 

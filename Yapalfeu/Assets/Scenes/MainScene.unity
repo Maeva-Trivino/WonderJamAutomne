@@ -6797,7 +6797,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2023644963}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1791695736
 MonoBehaviour:
@@ -7156,7 +7156,7 @@ PrefabInstance:
     - target: {fileID: 8289841121724613190, guid: e9186fb600da47c44a345f753f852184,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -19.99997
+      value: -19.999939
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9186fb600da47c44a345f753f852184, type: 3}
@@ -7477,6 +7477,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3827114464722650590, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827114464722650590, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827114464722650590, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7685877401956577120, guid: 92b83c1c51113ee469844f93a459ce2b,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -7687,6 +7702,53 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8017140617612682915, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017140616936828961, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017140617043252888, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017140617043252888, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Niv 2 :'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458490902511287124, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017140616872272277, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9152552805778943790, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 39b5f6298e910a64b99ce2b3da1dc47d,
+        type: 3}
+    - target: {fileID: 9152552805778943790, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017140618581772488, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7399926475289612233, guid: cbe332e28d01a004aa68a7df514db31a,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92b83c1c51113ee469844f93a459ce2b, type: 3}
 --- !u!4 &2112829442 stripped
@@ -7789,11 +7851,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2023644963}
     m_Modifications:
-    - target: {fileID: 1207668165225665783, guid: a3edb806e50756442ba03e3bbd517d3d,
-        type: 3}
-      propertyPath: m_Name
-      value: Background
-      objectReference: {fileID: 0}
     - target: {fileID: 1207668165225665545, guid: a3edb806e50756442ba03e3bbd517d3d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7848,6 +7905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1207668165225665783, guid: a3edb806e50756442ba03e3bbd517d3d,
+        type: 3}
+      propertyPath: m_Name
+      value: Background
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3edb806e50756442ba03e3bbd517d3d, type: 3}
@@ -7971,16 +8033,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6747993747298142965, guid: 2dc391298b566df43b83a5108167cd36,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 9de7a65f8308fb640afa6d0cd751b89f, type: 2}
-    - target: {fileID: 6747993747298142965, guid: 2dc391298b566df43b83a5108167cd36,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1753613095
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dc391298b566df43b83a5108167cd36, type: 3}
