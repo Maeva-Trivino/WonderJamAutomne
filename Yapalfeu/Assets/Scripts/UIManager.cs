@@ -35,7 +35,6 @@ public class UIManager : MonoBehaviour
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
         bucketImg.color = new Color(1f, 1f, 1f, .5f);
-        bucketImg.enabled = false;
         themeSound.Play();
     }
 
