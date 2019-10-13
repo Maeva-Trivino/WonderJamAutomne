@@ -5544,11 +5544,12 @@ MonoBehaviour:
   speed: 10
   popup: {fileID: 1961187302}
   bucket_on_head: {fileID: 1383097037}
-  getBucket: {fileID: 551140815}
-  getSeed: {fileID: 1027323142}
+  getBucketSound: {fileID: 551140815}
+  getSeedSound: {fileID: 1027323142}
   waterPlantSound: {fileID: 626377996}
   exstinguishTreeSound: {fileID: 1988773592}
   plantSeedSound: {fileID: 1505220558}
+  fillBucketSound: {fileID: 1112623678}
 --- !u!58 &1521029453
 CircleCollider2D:
   m_ObjectHideFlags: 0

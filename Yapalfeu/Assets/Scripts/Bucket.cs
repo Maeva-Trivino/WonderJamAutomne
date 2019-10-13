@@ -18,12 +18,7 @@ public class Bucket : MonoBehaviour, Interactive
     private State state;
 
     private SpriteRenderer renderer;
-    [SerializeField]
-    private AudioSource fillBucket;
 
-    //Sound of getting the bucket
-    [SerializeField]
-    private AudioSource getBucketSound;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +42,6 @@ public class Bucket : MonoBehaviour, Interactive
 
     public void Fill()
     {
-        fillBucket.Play();
         state = State.FILLED;
         renderer.sprite = bucket_sprite_filled;
     }
@@ -87,6 +81,7 @@ public class Bucket : MonoBehaviour, Interactive
                 {
                     if (player.GetBucket().state != this.state)
                     {
+<<<<<<< HEAD
                         if (this.isFilled())
                         {
                             this.Empty();
@@ -97,6 +92,15 @@ public class Bucket : MonoBehaviour, Interactive
                             this.Fill();
                             player.WaterPlant();
                         }
+=======
+                        this.Empty();
+                        player.ExchangeBucket(false);
+                    }
+                    else
+                    {
+                        this.Fill();
+                        player.ExchangeBucket(true);
+>>>>>>> Fix sound exchange bucket
                     }
                 }, 0);
             }

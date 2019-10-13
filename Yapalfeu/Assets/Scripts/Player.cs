@@ -18,10 +18,10 @@ public class Player : MonoBehaviour
     #region SoundEffects
     // Sound of getting or putting on the ground the bucket
     [SerializeField]
-    private AudioSource getBucket;
+    private AudioSource getBucketSound;
     // Sound of getting a seed
     [SerializeField]
-    private AudioSource getSeed;
+    private AudioSource getSeedSound;
     // Sound of water plant
     [SerializeField]
     private AudioSource waterPlantSound;
@@ -31,6 +31,9 @@ public class Player : MonoBehaviour
     //Sound of planting a seed
     [SerializeField]
     private AudioSource plantSeedSound;
+    //Sound of filling the Bucket
+    [SerializeField]
+    private AudioSource fillBucketSound;
     #endregion
     #endregion
 
@@ -50,6 +53,8 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
     private CircleCollider2D _collider, _trigger;
+
+    private bool onExchangeBucket;
     #endregion
     #endregion
 
@@ -71,6 +76,7 @@ public class Player : MonoBehaviour
         _trigger = cs.Find(c => c.isTrigger);
 
         dashTimeRemaining = 0;
+        onExchangeBucket = false;
     }
 
     // Update is called once per frame
@@ -335,6 +341,28 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool ExchangeBucket(bool isGetBucketFill)
+    {
+        getBucketSound.Play();
+        if (isGetBucketFill)
+        {
+            if (HasFilledBucket())
+            {
+                EmptyBucket();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            onExchangeBucket = true;
+            return FillBucket();
+        }
+    }
+
     private void EmptyBucket()
     {
         UIManager.instance.EmptyBucket();
@@ -344,7 +372,7 @@ public class Player : MonoBehaviour
 
     public void HarvestSeed()
     {
-        getSeed.Play();
+        getSeedSound.Play();
         seedCount++;
         UIManager.instance.UpdateSeeds(seedCount);
     }
@@ -353,7 +381,7 @@ public class Player : MonoBehaviour
     {
         if (!HasBucket())
         {
-            getBucket.Play();
+            getBucketSound.Play();
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
@@ -371,9 +399,14 @@ public class Player : MonoBehaviour
     {
         if (HasEmptyBucket())
         {
+            if (!onExchangeBucket)
+            {
+                fillBucketSound.Play();
+            }
             UIManager.instance.FilledBucket();
             bucket.Fill();
             bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
+            onExchangeBucket = false;
             return true;
         }
         else
@@ -386,7 +419,7 @@ public class Player : MonoBehaviour
     {
         if (HasBucket() && IsDropAllowed())
         {
-            getBucket.Play();
+            getBucketSound.Play();
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position + (Vector3)direction);
             UIManager.instance.DropBucket();
