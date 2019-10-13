@@ -10,9 +10,10 @@ public class Player : MonoBehaviour
     // Translation speed of the player
     [SerializeField]
     private float speed = 1f;
-
     [SerializeField]
     private GameObject popup = null;
+    [SerializeField]
+    private GameObject bucket_sprite = null;
     #endregion
 
     #region Private
@@ -65,6 +66,10 @@ public class Player : MonoBehaviour
         if (currentAction == null) 
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
+        _animator.SetBool("Walk_back", InputManager.GetAxis(Axis.Vertical) > .2f);
+        _animator.SetBool("Walk_front", InputManager.GetAxis(Axis.Vertical) < -.2f);
+        _animator.SetBool("Walk_right", InputManager.GetAxis(Axis.Horizontal) > .2f);
+        _animator.SetBool("Walk_left", InputManager.GetAxis(Axis.Horizontal) < -.2f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
 

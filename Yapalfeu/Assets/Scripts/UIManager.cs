@@ -6,18 +6,18 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    private Text nbSeedText,
-        nbLevelText,
-        nbTreeText,
-        timerText;
+    private Text nbSeedText = null,
+        nbLevelText = null,
+        nbTreeText = null,
+        timerText = null;
     [SerializeField]
-    private Image bucketImg;
+    private Image bucketImg = null;
     [SerializeField]
     private float limitTime = 120;
     [SerializeField]
-    private Sprite emptyBucketSprite;
+    private Sprite emptyBucketSprite = null;
     [SerializeField]
-    private Sprite filledBucketSprite;
+    private Sprite filledBucketSprite = null;
 
     private int nbActualTree;    
     private int nbGoalTree = 5;//
