@@ -39,13 +39,24 @@ public class UIManager : MonoBehaviour
     private int level = 1;
     private float startTime;
 
-    public static UIManager instance;
+    private static UIManager internalInstance;
+
+    public static UIManager instance {
+        get
+        {
+            if (internalInstance == null)
+                return FindObjectOfType<UIManager>();
+            else
+                return internalInstance;
+        }
+    }
+
     private bool paused = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
+        internalInstance = this;
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
         curtain.enabled = true;
