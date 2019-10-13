@@ -94,12 +94,14 @@ public class ForestTree : MonoBehaviour, Interactive
 
     public void Select()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
+        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
+        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()
