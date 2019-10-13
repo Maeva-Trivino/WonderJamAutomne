@@ -8,9 +8,9 @@ public class Climat : MonoBehaviour
     #region Editor
     [SerializeField]
     private static float
-        timeBetweenFire = 10,
-        timeBetweenTornado = 20f,
-        timeBetweenTempest = 30f;
+        timeBetweenFire = 17f,
+        timeBetweenTornado = 12f,
+        timeBetweenTempest = 23f;
     #endregion
 
     #region Private
@@ -18,15 +18,18 @@ public class Climat : MonoBehaviour
     private float timeSinceLastTempest;
     private float timeSinceLastTornado;
 
-    Fire fire;
-    Tornado tornado;
-    Tempest tempest;
+    private Fire fire;
+    private Tornado tornado;
+    private Tempest tempest;
     #endregion
+
+
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
+
         timeSinceLastFire = 0f;
         timeSinceLastTempest = 0f;
         timeSinceLastTornado = 0f;
