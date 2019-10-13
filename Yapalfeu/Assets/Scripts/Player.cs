@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private Bucket bucket;
     private UserAction currentAction;
     private Vector2 direction;
+    private float dashTimeRemaining;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
         bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
         List<CircleCollider2D> cs = new List<CircleCollider2D>(GetComponents<CircleCollider2D>());
         _trigger = cs.Find(c => c.isTrigger);
+
+        dashTimeRemaining = 0;
     }
 
     // Update is called once per frame
@@ -75,14 +78,24 @@ public class Player : MonoBehaviour
 
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
         Vector3 input = Vector3.zero;
-        if (currentAction == null)
+        if (currentAction == null && !IsDashing())
         {
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical));
             if(input.magnitude > 1)
                 input.Normalize();
+
+            if (input != Vector3.zero && InputManager.GetButtonDown(Button.X))
+                dashTimeRemaining = 0.10f;
         }
         if (input != Vector3.zero)
             direction = input;
+
+        if (IsDashing())
+        {
+            input = direction*2.5f;
+            dashTimeRemaining -= Time.deltaTime;
+        }
+
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.SetBool("Walk_back", InputManager.GetAxis(Axis.Vertical) > .2f);
         _animator.SetBool("Walk_front", InputManager.GetAxis(Axis.Vertical) < -.2f);
@@ -134,7 +147,7 @@ public class Player : MonoBehaviour
                 // On le sélectionne (mise en surbrillance)
                 interactive.Select();
 
-                if (nearestAction != null && InputManager.GetButtonDown(nearestAction.button))
+                if (nearestAction != null && !IsDashing() && InputManager.GetButtonDown(nearestAction.button))
                 {
                     currentAction = nearestAction;
                     currentAction.Do();
@@ -349,6 +362,11 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Private
+    private bool IsDashing()
+    {
+        return dashTimeRemaining > 0;
+    }
+
     private bool IsDropAllowed()
     {
         RaycastHit2D[] hits = new RaycastHit2D[2];
