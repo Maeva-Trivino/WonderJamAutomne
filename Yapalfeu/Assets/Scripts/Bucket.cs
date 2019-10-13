@@ -75,22 +75,29 @@ public class Bucket : MonoBehaviour, Interactive
         }
         else
         {
-            return new UserAction("Echanger", Button.A, null, 0, () =>
+            if (player.GetBucket().state != this.state)
             {
-                if (player.GetBucket().state != this.state)
+                return new UserAction("Échanger", Button.A, null, 0, () =>
                 {
-                    if (this.isFilled())
+                    if (player.GetBucket().state != this.state)
                     {
-                        this.Empty();
-                        player.ExchangeBucket(false);
+                        if (this.isFilled())
+                        {
+                            this.Empty();
+                            player.ExchangeBucket(false);
+                        }
+                        else
+                        {
+                            this.Fill();
+                            player.ExchangeBucket(true);
+                        }
                     }
-                    else
-                    {
-                        this.Fill();
-                        player.ExchangeBucket(true);
-                    }
-                }
-            }, 0);
+                }, 0);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
