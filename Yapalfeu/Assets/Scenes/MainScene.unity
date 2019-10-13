@@ -3794,6 +3794,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 643512452}
     m_Modifications:
+    - target: {fileID: 3199676460446202276, guid: 27e8e6b9eedef814289ccf1d723ec36d,
+        type: 3}
+      propertyPath: emptyBucketSprite
+      value: 
+      objectReference: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+        type: 3}
+    - target: {fileID: 3199676460446202276, guid: 27e8e6b9eedef814289ccf1d723ec36d,
+        type: 3}
+      propertyPath: filledBucketSprite
+      value: 
+      objectReference: {fileID: 949185140388405158, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+        type: 3}
     - target: {fileID: 3328143063231142353, guid: 27e8e6b9eedef814289ccf1d723ec36d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -4019,6 +4031,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8390714930212684798, guid: 27e8e6b9eedef814289ccf1d723ec36d,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+        type: 3}
     - target: {fileID: 8390714928508568453, guid: 27e8e6b9eedef814289ccf1d723ec36d,
         type: 3}
       propertyPath: m_AnchorMin.y

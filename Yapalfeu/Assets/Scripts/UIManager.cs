@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
         UpdateSeeds(0);
+        bucketImg.enabled = false;
     }
 
     // Update is called once per frame
@@ -99,11 +100,12 @@ public class UIManager : MonoBehaviour
 
     public void DropBucket()
     {
-        bucketImg.sprite = null;
+        bucketImg.enabled = false;
     }
 
     public void PickUpBucket(bool isFilled)
     {
+        bucketImg.enabled = true;
         bucketImg.sprite = isFilled ? filledBucketSprite : emptyBucketSprite;
     }
 }
