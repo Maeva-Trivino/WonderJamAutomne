@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
     private RectTransform endScreen;
     [SerializeField]
     private GameObject popup;
+    [SerializeField]
+    private AudioSource themeSound;
 
     private int nbActualTree;
     private int nbGoalTree = 5;//
@@ -41,9 +43,10 @@ public class UIManager : MonoBehaviour
         instance = this;
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
-        bucketImg.enabled = false;
         curtain.enabled = true;
         LeanTween.alpha((RectTransform)curtain.transform, 0f, .2f);
+        bucketImg.color = new Color(1f, 1f, 1f, .5f);
+        themeSound.Play();
     }
 
     // Update is called once per frame
@@ -110,20 +113,23 @@ public class UIManager : MonoBehaviour
     public void EmptyBucket()
     {
         bucketImg.sprite = emptyBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
     }
     public void FilledBucket()
     {
         bucketImg.sprite = filledBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
     }
 
     public void DropBucket()
     {
-        bucketImg.enabled = false;
+        bucketImg.sprite = emptyBucketSprite;
+        bucketImg.color = new Color(1f, 1f, 1f, .5f);
     }
 
     public void PickUpBucket(bool isFilled)
     {
-        bucketImg.enabled = true;
+        bucketImg.color = new Color(1f, 1f, 1f, 1f);
         bucketImg.sprite = isFilled ? filledBucketSprite : emptyBucketSprite;
     }
 

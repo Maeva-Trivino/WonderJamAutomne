@@ -23,6 +23,15 @@ public class ForestTree : MonoBehaviour, Interactive
         youngGrowDuration = 5f,
         seedGrowDuration = 8f,
         burnDuration = 8f;
+
+    #region SoundEffects
+    //Sound of growing tree
+    [SerializeField]
+    private AudioSource growTreeSound;
+    //Sound of burning tree
+    [SerializeField]
+    private AudioSource burningTreeSound;
+    #endregion
     #endregion
 
     #region Public
@@ -37,6 +46,7 @@ public class ForestTree : MonoBehaviour, Interactive
     // Négatif s'il ne brûle pas
     private float burning;
 
+    private SpriteRenderer renderer;
     private Animator animator;
 
     #endregion
@@ -45,12 +55,13 @@ public class ForestTree : MonoBehaviour, Interactive
     public static List<ForestTree> trees = new List<ForestTree>();
     #endregion
     #endregion
-// Start is called before the first frame update
-void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
 
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
 
         if (Random.Range(0, 1000) < 750)
             ChangeState(State.SOIL);
@@ -89,11 +100,15 @@ void Start()
         {
             case State.PLANTED_WET:
                 if (stateDuration >= plantedGrowDuration)
+                {
+                    growTreeSound.Play();
                     ChangeState(State.YOUNG_DRY);
+                }
                 break;
             case State.YOUNG_WET:
                 if (stateDuration >= youngGrowDuration)
                 {
+                    growTreeSound.Play();
                     ChangeState(State.MATURE);
                     UIManager.instance.AddTree();
                 }
@@ -120,12 +135,12 @@ void Start()
         if (state != State.SOIL)
         {
             GetComponent<Collider2D>().isTrigger = false;
-            GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+            renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
         }
         else
         {
             GetComponent<Collider2D>().isTrigger = true;
-            GetComponent<SpriteRenderer>().sortingOrder = -32768;
+            renderer.sortingOrder = -32768;
         }
 
         switch (state)
@@ -152,14 +167,14 @@ void Start()
 
     public void Select()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 1);
-        gameObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        renderer.material.SetInt("_OutlineEnabled", 1);
+        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        gameObject.GetComponent<Renderer>().material.SetInt("_OutlineEnabled", 0);
-        gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        renderer.material.SetInt("_OutlineEnabled", 0);
+        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()
@@ -225,7 +240,7 @@ void Start()
         if (IsBurning())
         {
             if (player.HasFilledBucket())
-                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.WaterPlant()) StopBurning(); });
+                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.ExtinguishFire()) StopBurning(); });
         }
         else
         {
@@ -274,6 +289,7 @@ void Start()
     {
         if (!IsBurning() && IsBurnable())
         {
+            burningTreeSound.Play();
             burning = 0;
             BurnSeed();
             animator.SetBool("isBurning", true);
@@ -285,7 +301,7 @@ void Start()
         }
         
     }
-    private void StopBurning()
+    public void StopBurning()
     {
         burning = -1;
         animator.SetBool("isBurning", false);

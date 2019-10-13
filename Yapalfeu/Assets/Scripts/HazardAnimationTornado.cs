@@ -17,6 +17,10 @@ public class HazardAnimationTornado : MonoBehaviour
 
     private List<ForestTree> treesToWind;
 
+    //Sound of the wind
+    [SerializeField]
+    private AudioSource windSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +69,7 @@ public class HazardAnimationTornado : MonoBehaviour
         Reset();
         GetComponent<SpriteRenderer>().sprite = sprite;
         mooving = true;
+        windSound.Play();
     }
 
 

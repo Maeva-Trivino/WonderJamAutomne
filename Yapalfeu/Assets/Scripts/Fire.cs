@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Fire : Hazard
+public class Fire
 {
-    public void Triggerhazard()
+    public bool Triggerhazard()
     {
         List<ForestTree> burnableTrees = new List<ForestTree>();
         List<ForestTree> treesToBurn= new List<ForestTree>();
@@ -15,7 +15,7 @@ public class Fire : Hazard
             if (t.IsBurnable()) 
             {
                 burnableTrees.Add(t);
-                if (number.Next(1, 100) > 25)
+                if (Random.Range(0,100) <= 25)
                 {
                     treesToBurn.Add(t);
                 }
@@ -27,11 +27,14 @@ public class Fire : Hazard
             treesToBurn.Add(burnableTrees[number.Next(0, burnableTrees.Count)]);
         }
 
-        if (burnableTrees.Count > 0)
+        if (treesToBurn.Count > 0)
         {
-            
-            //bool b  = burnableTrees[number.Next(0, burnableTrees.Count - 1)].SetOnFire();
             HazardAnimationFire.instance.Trigger(treesToBurn);
+            return true;
+        }
+        else
+        {
+            return false; 
         }
         
 
