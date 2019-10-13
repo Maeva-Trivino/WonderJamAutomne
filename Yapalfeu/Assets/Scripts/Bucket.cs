@@ -9,6 +9,11 @@ public class Bucket : MonoBehaviour, Interactive
         EMPTY,
         FILLED
     }
+    
+    [SerializeField]
+    private Sprite bucket_sprite_empty = null;
+    [SerializeField]
+    private Sprite bucket_sprite_filled = null;
 
     State state;
 
@@ -16,7 +21,7 @@ public class Bucket : MonoBehaviour, Interactive
     void Start()
     {
         state = State.EMPTY;
-
+        GetComponent<SpriteRenderer>().sprite = bucket_sprite_empty;
     }
 
     // Update is called once per frame
@@ -28,11 +33,13 @@ public class Bucket : MonoBehaviour, Interactive
     public void Empty()
     {
         state = State.EMPTY;
+        GetComponent<SpriteRenderer>().sprite = bucket_sprite_empty;
     }
 
     public void Fill()
     {
         state = State.FILLED;
+        GetComponent<SpriteRenderer>().sprite = bucket_sprite_filled;
     }
 
     public bool isFilled()

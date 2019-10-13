@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject popup = null;
     [SerializeField]
-    private GameObject bucket_sprite = null;
+    private GameObject bucket_on_head = null;
     #endregion
 
     #region Private
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
     }
 
     // Update is called once per frame
@@ -246,6 +247,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.EmptyBucket();
             bucket.Empty();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -268,6 +270,7 @@ public class Player : MonoBehaviour
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
             UIManager.instance.PickUpBucket(this.bucket.isFilled());
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -282,6 +285,7 @@ public class Player : MonoBehaviour
         {
             UIManager.instance.FilledBucket();
             bucket.Fill();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponent<SpriteRenderer>().sprite;
             return true;
         }
         else
@@ -297,6 +301,7 @@ public class Player : MonoBehaviour
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position);
             UIManager.instance.DropBucket();
+            bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
             bucket = null;
             return true;
         }
