@@ -8,9 +8,9 @@ public class Climat : MonoBehaviour
     #region Editor
     [SerializeField]
     private static float
-        timeBetweenFire = 10f,
+        timeBetweenFire = 10,
         timeBetweenTornado = 20f,
-        timeBetweenTempest = 20f;
+        timeBetweenTempest = 30f;
     #endregion
 
     #region Private
@@ -27,9 +27,9 @@ public class Climat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timeBetweenFire = 0f;
-        timeBetweenTempest = 0f;
-        timeBetweenTornado = 0f;
+        timeSinceLastFire = 0f;
+        timeSinceLastTempest = 0f;
+        timeSinceLastTornado = 0f;
         fire = new Fire();
         tornado = new Tornado();
         tempest = new Tempest();
@@ -54,7 +54,7 @@ public class Climat : MonoBehaviour
         }
         if (timeSinceLastTempest >= timeBetweenTempest)
         {
-            timeSinceLastFire = 0f;
+            timeSinceLastTempest= 0f;
             tempest.Triggerhazard();
         }
     }

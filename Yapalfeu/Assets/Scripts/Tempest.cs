@@ -7,16 +7,23 @@ public class Tempest : Hazard
 
     public void Triggerhazard()
     {
-        List<ForestTree> DrownableTrees = new List<ForestTree>();
+        List<ForestTree> drownableTrees = new List<ForestTree>();
         System.Random number = new System.Random();
+        Debug.Log("Entree dans Tempest()");
 
         foreach (ForestTree t in ForestTree.trees)
         {
             if (t.IsDrownable())
             {
-                DrownableTrees.Add(t);
+                drownableTrees.Add(t);
             }
         }
-        DrownableTrees[number.Next(0, DrownableTrees.Count)].Drown();
+        if (drownableTrees.Count > 0)
+        {
+            bool b =drownableTrees[number.Next(0, drownableTrees.Count - 1)].Drown();
+            Debug.Log("Un arbre est noyé => " + b);
+        }
+            
+
     }
 }

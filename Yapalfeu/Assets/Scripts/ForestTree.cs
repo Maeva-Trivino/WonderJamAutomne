@@ -158,6 +158,11 @@ void Start()
         return burning >= 0;
     }
 
+    public bool IsBurnable()
+    {
+        return state != State.BURNT && state != State.SOIL ;
+    }
+
     private void StopBurning()
     {
         burning = -1;
