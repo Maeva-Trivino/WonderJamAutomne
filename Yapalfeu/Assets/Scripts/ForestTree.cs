@@ -281,7 +281,7 @@ void Start()
         }
         
     }
-    private void StopBurning()
+    public void StopBurning()
     {
         burning = -1;
         animator.SetBool("isBurning", false);
