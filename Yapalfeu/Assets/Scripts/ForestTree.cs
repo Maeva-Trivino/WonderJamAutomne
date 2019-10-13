@@ -43,7 +43,7 @@ public class ForestTree : MonoBehaviour, Interactive
     // Start is called before the first frame update
     void Start()
     {
-        state = State.SOIL;
+        ChangeState(State.SOIL);
         burning = -1;
 
         trees.Add(this);
@@ -86,8 +86,10 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         stateDuration = 0;
         state = s;
-        if(s==State.YOUNG_DRY)
+        if (state == State.PLANTED_DRY || state == State.PLANTED_WET || state == State.YOUNG_DRY || state == State.YOUNG_WET || state == State.MATURE)
             GetComponent<Collider2D>().isTrigger = false;
+        else
+            GetComponent<Collider2D>().isTrigger = true;
     }
 
     public void Select()
@@ -196,7 +198,7 @@ public class ForestTree : MonoBehaviour, Interactive
 
     public bool SetOnFire()
     {
-        if (burning < 0)
+        if (!IsBurning())
         {
             burning = 0;
             return true;

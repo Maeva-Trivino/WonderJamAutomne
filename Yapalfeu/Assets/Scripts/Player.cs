@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     #region Private
     private PlayerState state;
     // Liste des objects à portée d'intéraction
-    private List<GameObject> inRange;
+    private HashSet<GameObject> inRange;
     // Cible de l'intéraction
     private GameObject selected;
     private int seedCount;
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         seedCount = 1;
-        inRange = new List<GameObject>();
+        inRange = new HashSet<GameObject>();
         updatePopup(null);
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
