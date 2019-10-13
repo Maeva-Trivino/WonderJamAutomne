@@ -135,14 +135,14 @@ public class Player : MonoBehaviour
         if (action != null)
         {
             Text text = popup.GetComponentInChildren<Text>();
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            screenPos.y += 45;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.GetComponentInChildren<Renderer>().bounds.size.y/2));
 
             if (action == currentAction)
             {
                 if (action.combos == null)
                 {
                     text.text = "";
+                    text.fontSize = 12;
                 }
                 else
                 {
@@ -152,7 +152,8 @@ public class Player : MonoBehaviour
                         text.text += InputManager.GetButtonName(b) + " ";
                     }
 
-                    text.text.TrimEnd();
+                    text.text = text.text.Remove(text.text.Length - 1);
+                    text.fontSize = 16;
                 }
 
                 Slider slider = popup.GetComponentInChildren<Slider>();
@@ -163,6 +164,7 @@ public class Player : MonoBehaviour
             else
             {
                 text.text = "(" + InputManager.GetButtonName(action.button) + ") " + action.name;
+                text.fontSize = 12;
                 popup.GetComponentInChildren<Slider>().gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
 
