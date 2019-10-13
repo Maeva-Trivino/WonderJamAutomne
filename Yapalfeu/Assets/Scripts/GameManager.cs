@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
         LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, 0f).setRecursive(false);
         videoIntro.Play();
         videoIntro.Pause();
+
+        LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, .2f);
     }
 
     // Update is called once per frame

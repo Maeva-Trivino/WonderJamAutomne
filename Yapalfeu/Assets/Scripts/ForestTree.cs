@@ -25,6 +25,10 @@ public class ForestTree : MonoBehaviour, Interactive
         burnDuration = 8f;
     #endregion
 
+    #region Public
+    public bool IsSoilOrBurnt => state == State.SOIL || state == State.BURNT;
+    #endregion
+
     #region Private
     private State state;
 

@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c7dc89ea9d36694c9fa923c23d729f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoIntro: {fileID: 0}
 --- !u!1 &7726122885241603356
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +163,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 70, y: 22.5}
-  m_SizeDelta: {x: -280, y: -45}
+  m_AnchoredPosition: {x: 95.100006, y: 18.400024}
+  m_SizeDelta: {x: -330.1, y: -36.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8830077533301516691
 CanvasRenderer:
@@ -192,12 +193,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 17
+    m_Font: {fileID: 12800000, guid: 604d9e54e62259a4890807c63c2a2bc5, type: 3}
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
-    m_MaxSize: 50
+    m_MaxSize: 238
     m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
