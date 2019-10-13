@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetComponentsInChildren<Text>()[1].text = "APPUYEZ SUR "+InputManager.GetButtonName(Button.A)+"\nPOUR COMMENCER";
         if (!isHidden && InputManager.GetButtonDown(Button.A))
         {
             isHidden = true;

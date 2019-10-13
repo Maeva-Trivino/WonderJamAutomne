@@ -33,7 +33,7 @@ public class InputManager
             case Button.X:
                 return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Joystick2Button2);
             case Button.Y:
-                return Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Joystick2Button3);
+                return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Joystick2Button3);
             case Button.LB:
                 return Input.GetKeyDown(KeyCode.Y) || Input.GetKeyDown(KeyCode.Joystick1Button4) || Input.GetKeyDown(KeyCode.Joystick2Button4);
             case Button.RB:
@@ -92,20 +92,42 @@ public class InputManager
 
     public static string GetButtonName(Button button)
     {
-        switch (button)
+        string[] names = Input.GetJoystickNames();
+        if (names.Length > 0 && names[0].Length > 0)
         {
-            case Button.A:
-                return "E";
-            case Button.B:
-                return "F";
-            case Button.LEFT:
-                return "←";
-            case Button.RIGHT:
-                return "→";
-            case Button.UP:
-                return "↑";
-            case Button.DOWN:
-                return "↓";
+            switch (button)
+            {
+                case Button.A:
+                    return "A";
+                case Button.B:
+                    return "B";
+                case Button.LEFT:
+                    return "←";
+                case Button.RIGHT:
+                    return "→";
+                case Button.UP:
+                    return "↑";
+                case Button.DOWN:
+                    return "↓";
+            }
+        }
+        else
+        {
+            switch (button)
+            {
+                case Button.A:
+                    return "E";
+                case Button.B:
+                    return "F";
+                case Button.LEFT:
+                    return "←";
+                case Button.RIGHT:
+                    return "→";
+                case Button.UP:
+                    return "↑";
+                case Button.DOWN:
+                    return "↓";
+            }
         }
 
         return "Unknown key name";

@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
             if(input.magnitude > 1)
                 input.Normalize();
 
-            if (input != Vector3.zero && InputManager.GetButtonDown(Button.X))
+            if (input != Vector3.zero && InputManager.GetButtonDown(Button.Y))
                 dashTimeRemaining = 0.10f;
         }
         if (input != Vector3.zero)
