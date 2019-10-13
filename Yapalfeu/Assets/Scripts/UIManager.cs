@@ -25,8 +25,13 @@ public class UIManager : MonoBehaviour
     private RectTransform endScreen;
     [SerializeField]
     private GameObject popup;
+
+    //Sound of the theme
     [SerializeField]
     private AudioSource themeSound;
+    //Sound of the gameOver
+    [SerializeField]
+    private AudioSource gameOverSound;
 
     private int nbSeeds = 10;
     private int nbActualTree;    
@@ -156,6 +161,8 @@ public class UIManager : MonoBehaviour
 
     public void DisplayEndScreen()
     {
+        themeSound.Stop();
+        gameOverSound.Play();
         paused = true;
         endScreen.GetChild(2).GetComponent<Text>().text = level.ToString();
         StartCoroutine(WaitForUser());
