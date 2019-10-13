@@ -24,10 +24,12 @@ public class Player : MonoBehaviour
     private int seedCount;
     private Bucket bucket;
     private Action currentAction;
+    private Vector2 direction;
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
+    private CircleCollider2D _collider, _trigger;
     #endregion
     #endregion
 
@@ -42,6 +44,8 @@ public class Player : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        List<CircleCollider2D> cs = new List<CircleCollider2D>(GetComponents<CircleCollider2D>());
+        _trigger = cs.Find(c => c.isTrigger);
     }
 
     // Update is called once per frame
@@ -59,11 +63,17 @@ public class Player : MonoBehaviour
                 currentAction = null;
             }
         }
-            
+
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
         Vector3 input = Vector3.zero;
-        if (currentAction == null) 
-            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical)).normalized;
+        if (currentAction == null)
+        {
+            input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical));
+            if(input.magnitude > 1)
+                input.Normalize();
+        }
+        if (input != Vector3.zero)
+            direction = input;
         _animator.SetBool("IsWalking", input.magnitude > .1f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
         _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
@@ -287,10 +297,10 @@ public class Player : MonoBehaviour
 
     public bool DropBucket()
     {
-        if (HasBucket())
+        if (HasBucket() && IsDropAllowed())
         {
             // TODO : poser à côté du joueur et non sur le joueur
-            bucket.SetOnGround(transform.position);
+            bucket.SetOnGround(transform.position + (Vector3)direction);
             UIManager.instance.DropBucket();
             bucket = null;
             return true;
@@ -299,6 +309,26 @@ public class Player : MonoBehaviour
         {
             return false;
         }
+    }
+    #endregion
+
+    #region Private
+    private bool IsDropAllowed()
+    {
+        RaycastHit2D[] hits = new RaycastHit2D[2];
+        Physics2D.Raycast(transform.position, direction, new ContactFilter2D(), hits);
+
+        // If it hits something...
+        if (hits[1].collider != null)
+        {
+            // Calculate the distance from the surface and the "error" relative
+            // to the floating height.
+            float distance = ((Vector3) hits[1].point - transform.position).magnitude;
+            Debug.Log(distance > _trigger.radius);
+            return distance > _trigger.radius;
+        }
+        Debug.Log("out");
+        return true;
     }
     #endregion
     #endregion
