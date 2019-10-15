@@ -87,13 +87,13 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 if(state == State.MATURE)
                 {
+                    UIManager.instance.DeleteTree();
                     ChangeState(State.BURNT);
                 }
                 else
                 {
                     ChangeState(State.SOIL);
                 }
-                UIManager.instance.DeleteTree();
             }
         }
 
