@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Tornado
 {
-
-
     public bool Triggerhazard()
     {
         List<ForestTree> seedTrees = new List<ForestTree>();
         System.Random number = new System.Random();
 
-        foreach (ForestTree t in ForestTree.trees)
+        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))
         {
+            ForestTree t = o.GetComponent<ForestTree>();
             if (t.HasSeed() || t.IsPlant())
             {
                 seedTrees.Add(t);
@@ -22,12 +21,11 @@ public class Tornado
         {
             HazardAnimationTornado.instance.Trigger(seedTrees);
             return true;
-        }else
+        }
+        else
         {
             return false;
         }
 
     }
-
-
 }

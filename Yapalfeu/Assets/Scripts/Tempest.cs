@@ -12,8 +12,9 @@ public class Tempest
         System.Random number = new System.Random();
         Debug.Log("Entree dans Tempest()");
 
-        foreach (ForestTree t in ForestTree.trees)
+        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))
         {
+            ForestTree t = o.GetComponent<ForestTree>();
             if (t.IsDrownable())
             {
                 drownableTrees.Add(t);
@@ -24,6 +25,7 @@ public class Tempest
                 burnableTrees.Add(t);
             }
         }
+
         if (drownableTrees.Count > 0)
         {
             HazardAnimationTempest.instance.Trigger(drownableTrees,burnableTrees);
@@ -33,7 +35,5 @@ public class Tempest
         {
             return false;
         }
-
-
     }
 }

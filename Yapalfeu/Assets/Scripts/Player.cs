@@ -100,17 +100,17 @@ public class Player : MonoBehaviour
         }
 
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector3 input = Vector3.zero;
+        Vector2 input = Vector2.zero;
         if (currentAction == null && !IsDashing())
         {
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical));
             if(input.magnitude > 1)
                 input.Normalize();
 
-            if (input != Vector3.zero && InputManager.GetButtonDown(Button.Y))
+            if (input != Vector2.zero && InputManager.GetButtonDown(Button.Y))
                 dashTimeRemaining = 0.10f;
         }
-        if (input != Vector3.zero)
+        if (input != Vector2.zero)
             direction = input;
 
         if (IsDashing())
@@ -125,7 +125,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("Walk_right", InputManager.GetAxis(Axis.Horizontal) > .2f);
         _animator.SetBool("Walk_left", InputManager.GetAxis(Axis.Horizontal) < -.2f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
-        _rigidbody2D.MovePosition(transform.position + speed * input * Time.deltaTime);
+        _rigidbody2D.MovePosition(_rigidbody2D.position + speed * input * Time.deltaTime);
 
         if (currentAction == null)
         {

@@ -30,7 +30,7 @@ public class HazardAnimationFire: MonoBehaviour
     {
         if (mooving)
         {
-            ((RectTransform)transform).anchoredPosition += Vector2.right * speed;
+            ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
             List<ForestTree> clone = new List<ForestTree>(treesToBurn.Count);
             foreach (ForestTree t in treesToBurn)

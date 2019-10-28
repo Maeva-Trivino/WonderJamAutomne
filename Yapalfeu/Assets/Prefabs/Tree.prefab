@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 6475330378095943783}
   m_Layer: 0
   m_Name: Tree
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -170,6 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   growTreeSound: {fileID: 4787788225981628026, guid: bdc95c118e49e446eaf8a70adc4ca754,
     type: 3}
+  burningTreeSound: {fileID: 0}
+  throwTreeSound: {fileID: 0}
 --- !u!58 &6475330378095943783
 CircleCollider2D:
   m_ObjectHideFlags: 0

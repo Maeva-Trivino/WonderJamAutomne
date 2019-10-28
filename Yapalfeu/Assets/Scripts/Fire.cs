@@ -10,8 +10,9 @@ public class Fire
 
         System.Random number = new System.Random();
         Debug.Log("Entree dans Fire()");
-        foreach (ForestTree t in ForestTree.trees)
+        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))
         {
+            ForestTree t = o.GetComponent<ForestTree>();
             if (t.IsBurnable()) 
             {
                 burnableTrees.Add(t);
@@ -19,9 +20,9 @@ public class Fire
                 {
                     treesToBurn.Add(t);
                 }
-                
             }
         }
+
         if(burnableTrees.Count >= 1 && treesToBurn.Count == 0)
         {
             treesToBurn.Add(burnableTrees[number.Next(0, burnableTrees.Count)]);
@@ -36,8 +37,5 @@ public class Fire
         {
             return false; 
         }
-        
-
-
     }
 }

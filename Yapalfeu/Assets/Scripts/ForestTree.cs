@@ -54,9 +54,6 @@ public class ForestTree : MonoBehaviour, Interactive
 
     #endregion
 
-    #region Static
-    public static List<ForestTree> trees = new List<ForestTree>();
-    #endregion
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -72,8 +69,6 @@ public class ForestTree : MonoBehaviour, Interactive
             ChangeState(State.BURNT);
 
         burning = -1;
-
-        trees.Add(this);
     }
 
     // Update is called once per frame

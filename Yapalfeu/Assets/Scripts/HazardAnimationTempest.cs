@@ -37,7 +37,7 @@ public class HazardAnimationTempest : MonoBehaviour
 
         if (mooving)
         {
-            ((RectTransform)transform).anchoredPosition += Vector2.right * speed;
+            ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
             List<ForestTree> clone = new List<ForestTree>(treesToDrown.Count);
             foreach (ForestTree t in treesToDrown)

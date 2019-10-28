@@ -111,8 +111,8 @@ public class UIManager : MonoBehaviour
             DisplayEndScreen();
         }
 
-        var f2 = ForestTree.trees.FindAll(f => !f.IsSoilOrBurnt);
-        if (f2.Count == 0 && nbSeeds == 0)
+        var f2 = System.Array.FindAll(GameObject.FindGameObjectsWithTag("Tree"), o => !o.GetComponent<ForestTree>().IsSoilOrBurnt);
+        if (f2.Length == 0 && nbSeeds == 0)
             DisplayEndScreen();
     }
 
