@@ -8,7 +8,7 @@ using UnityEngine.Video;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private VideoPlayer videoIntro;
+    private VideoPlayer videoIntro = null;
 
     private CanvasGroup group;
     private bool isHidden;

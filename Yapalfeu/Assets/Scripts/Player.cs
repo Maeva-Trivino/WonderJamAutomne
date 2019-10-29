@@ -18,27 +18,26 @@ public class Player : MonoBehaviour
     #region SoundEffects
     // Sound of getting or putting on the ground the bucket
     [SerializeField]
-    private AudioSource getBucketSound;
+    private AudioSource getBucketSound = null;
     // Sound of getting a seed
     [SerializeField]
-    private AudioSource getSeedSound;
+    private AudioSource getSeedSound = null;
     // Sound of water plant
     [SerializeField]
-    private AudioSource waterPlantSound;
+    private AudioSource waterPlantSound = null;
     // Sound of extinguish tree
     [SerializeField]
-    private AudioSource exstinguishTreeSound;
+    private AudioSource exstinguishTreeSound = null;
     //Sound of planting a seed
     [SerializeField]
-    private AudioSource plantSeedSound;
+    private AudioSource plantSeedSound = null;
     //Sound of filling the Bucket
     [SerializeField]
-    private AudioSource fillBucketSound;
+    private AudioSource fillBucketSound = null;
     #endregion
     #endregion
 
     #region Private
-    private PlayerState state;
     // Liste des objects à portée d'intéraction
     private HashSet<GameObject> inRange;
     // Cible de l'intéraction

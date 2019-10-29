@@ -20,7 +20,7 @@ public class HazardAnimationTornado : MonoBehaviour
 
     //Sound of the wind
     [SerializeField]
-    private AudioSource windSound;
+    private AudioSource windSound = null;
 
     // Start is called before the first frame update
     void Start()
@@ -36,28 +36,27 @@ public class HazardAnimationTornado : MonoBehaviour
         {
             ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
-            List<ForestTree> clone = new List<ForestTree>(treesToWind.Count);
-            foreach (ForestTree t in treesToWind)
-            {
-                clone.Add(t);
-            }
+            List<ForestTree> removedTrees = new List<ForestTree>();
 
-            foreach (ForestTree t in clone)
+            foreach (ForestTree t in treesToWind)
             {
                 if ((((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500f > t.gameObject.transform.position.x)
                 {
                     if (t.HasSeed())
                     {
                         t.RemoveSeed();
-                        treesToWind.Remove(t);
+                        removedTrees.Add(t);
                     }
-                    else  if (t.IsPlant()){
+                    else if (t.IsPlant()){
                         t.Drown();
-                        treesToWind.Remove(t);
+                        removedTrees.Add(t);
                     }
-
-
                 }
+            }
+
+            foreach (ForestTree t in removedTrees)
+            {
+                treesToWind.Remove(t);
             }
 
             if (((RectTransform)transform).anchoredPosition.x > 1000f)

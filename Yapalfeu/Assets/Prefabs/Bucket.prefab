@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80dbf876dc23266409ab0f2af5df310f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bucket_sprite_empty: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+  emptyBucketSprite: {fileID: 7578331518214074657, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
     type: 3}
-  bucket_sprite_filled: {fileID: 949185140388405158, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
+  filledBucketSprite: {fileID: 949185140388405158, guid: c090e4ac74abd4a4fbad1f1377b37ca3,
     type: 3}

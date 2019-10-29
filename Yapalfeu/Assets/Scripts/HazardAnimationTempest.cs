@@ -21,7 +21,7 @@ public class HazardAnimationTempest : MonoBehaviour
 
     //Sound of the wave
     [SerializeField]
-    private AudioSource waveSound;
+    private AudioSource waveSound = null;
 
     // Start is called before the first frame update
     void Start()
@@ -39,19 +39,20 @@ public class HazardAnimationTempest : MonoBehaviour
         {
             ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
-            List<ForestTree> clone = new List<ForestTree>(treesToDrown.Count);
-            foreach (ForestTree t in treesToDrown)
-            {
-                clone.Add(t);
-            }
+            List<ForestTree> drownedTrees = new List<ForestTree>();
 
-            foreach (ForestTree t in clone)
+            foreach (ForestTree t in treesToDrown)
             {
                 if ((((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500 > t.gameObject.transform.position.x)
                 {
                     t.Drown();
-                    treesToDrown.Remove(t);
+                    drownedTrees.Remove(t);
                 }
+            }
+
+            foreach (ForestTree t in drownedTrees)
+            {
+                treesToDrown.Remove(t);
             }
 
             foreach (ForestTree t in burnableTrees)
@@ -62,7 +63,6 @@ public class HazardAnimationTempest : MonoBehaviour
                     {
                         t.StopBurning();
                     }
-                    
                 }
             }
 

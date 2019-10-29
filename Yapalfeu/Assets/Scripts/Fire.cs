@@ -8,7 +8,6 @@ public class Fire
         List<ForestTree> burnableTrees = new List<ForestTree>();
         List<ForestTree> treesToBurn= new List<ForestTree>();
 
-        System.Random number = new System.Random();
         Debug.Log("Entree dans Fire()");
         foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))
         {
@@ -25,7 +24,7 @@ public class Fire
 
         if(burnableTrees.Count >= 1 && treesToBurn.Count == 0)
         {
-            treesToBurn.Add(burnableTrees[number.Next(0, burnableTrees.Count)]);
+            treesToBurn.Add(burnableTrees[Random.Range(0, burnableTrees.Count)]);
         }
 
         if (treesToBurn.Count > 0)

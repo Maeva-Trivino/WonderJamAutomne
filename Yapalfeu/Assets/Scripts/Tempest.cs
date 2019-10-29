@@ -9,7 +9,6 @@ public class Tempest
     {
         List<ForestTree> drownableTrees = new List<ForestTree>();
         List<ForestTree> burnableTrees = new List<ForestTree>();
-        System.Random number = new System.Random();
         Debug.Log("Entree dans Tempest()");
 
         foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))

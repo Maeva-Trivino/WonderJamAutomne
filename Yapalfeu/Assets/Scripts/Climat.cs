@@ -8,16 +8,16 @@ public class Climat : MonoBehaviour
     #region Editor
     [SerializeField]
     private static float
-        timeBetweenFire = 17f,
+      /*timeBetweenFire = 17f,
         timeBetweenTornado = 12f,
-        timeBetweenTempest = 23f,
+        timeBetweenTempest = 23f,*/
         timeBetweenHazardMin= 15f,
         timeBetweenHazardMax= 30f;
 
     #endregion
 
     #region Private
-/*    private float timeSinceLastFire;
+/*  private float timeSinceLastFire;
     private float timeSinceLastTempest;
     private float timeSinceLastTornado;*/
     private float timeSinceLastHazard;
@@ -52,15 +52,23 @@ public class Climat : MonoBehaviour
         if(timeSinceLastHazard >= timeToNextHazard)
         {
             float hazardChoice = Random.Range(0, 100);
+            bool hazardTriggered = false;
 
-            if (hazardChoice <= 40 && fire.Triggerhazard()) ;
-            else if (hazardChoice <= 70 && tornado.Triggerhazard()) ;
-            else if (hazardChoice <= 100 && tempest.Triggerhazard()) ;
-            else if (fire.Triggerhazard()) ; 
-            else if (tornado.Triggerhazard()) ; 
+            if (hazardChoice <= 40)
+                hazardTriggered = fire.Triggerhazard();
+            else if (hazardChoice <= 70)
+                hazardTriggered = tornado.Triggerhazard();
+            else
+                hazardTriggered = tempest.Triggerhazard();
+
+            if (!hazardTriggered)
+                hazardTriggered = fire.Triggerhazard();
+
+            if (!hazardTriggered)
+                tornado.Triggerhazard();
+
             timeToNextHazard = Random.Range(timeBetweenHazardMin, timeBetweenHazardMax);
             timeSinceLastHazard = 0f;
-
         }
     }
 }

@@ -11,39 +11,39 @@ public class Bucket : MonoBehaviour, Interactive
     }
     
     [SerializeField]
-    private Sprite bucket_sprite_empty = null;
+    private Sprite emptyBucketSprite = null;
     [SerializeField]
-    private Sprite bucket_sprite_filled = null;
+    private Sprite filledBucketSprite = null;
 
     private State state;
 
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
 
 
     // Start is called before the first frame update
     void Start()
     {
         state = State.EMPTY;
-        renderer = GetComponentInChildren<SpriteRenderer>();
-        renderer.sprite = bucket_sprite_empty;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = emptyBucketSprite;
     }
 
     // Update is called once per frame
     void Update()
     {
-        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
     }
 
     public void Empty()
     {
         state = State.EMPTY;
-        renderer.sprite = bucket_sprite_empty;
+        spriteRenderer.sprite = emptyBucketSprite;
     }
 
     public void Fill()
     {
         state = State.FILLED;
-        renderer.sprite = bucket_sprite_filled;
+        spriteRenderer.sprite = filledBucketSprite;
     }
 
     public bool isFilled()
@@ -53,14 +53,14 @@ public class Bucket : MonoBehaviour, Interactive
 
     public void Select()
     {
-        renderer.material.SetInt("_OutlineEnabled", 1);
-        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        spriteRenderer.material.SetInt("_OutlineEnabled", 1);
+        spriteRenderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        renderer.material.SetInt("_OutlineEnabled", 0);
-        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
+        spriteRenderer.material.SetInt("_OutlineEnabled", 0);
+        spriteRenderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public UserAction GetAction(Player player)

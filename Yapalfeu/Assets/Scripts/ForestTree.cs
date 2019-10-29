@@ -27,18 +27,14 @@ public class ForestTree : MonoBehaviour, Interactive
     #region SoundEffects
     //Sound of growing tree
     [SerializeField]
-    private AudioSource growTreeSound;
+    private AudioSource growTreeSound = null;
     //Sound of burning tree
     [SerializeField]
-    private AudioSource burningTreeSound;
+    private AudioSource burningTreeSound = null;
     //Sound of throwing a tree
     [SerializeField]
-    private AudioSource throwTreeSound;
+    private AudioSource throwTreeSound = null;
     #endregion
-    #endregion
-
-    #region Public
-    public bool IsSoilOrBurnt => state == State.SOIL || state == State.BURNT;
     #endregion
 
     #region Private
@@ -49,7 +45,7 @@ public class ForestTree : MonoBehaviour, Interactive
     // Négatif s'il ne brûle pas
     private float burning;
 
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
     private Animator animator;
 
     #endregion
@@ -58,8 +54,8 @@ public class ForestTree : MonoBehaviour, Interactive
     // Start is called before the first frame update
     void Start()
     {
-        renderer = GetComponentInChildren<SpriteRenderer>();
-        renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
 
         animator = GetComponentInChildren<Animator>();
 
@@ -133,12 +129,12 @@ public class ForestTree : MonoBehaviour, Interactive
         if (state != State.SOIL)
         {
             GetComponent<Collider2D>().isTrigger = false;
-            renderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+            spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
         }
         else
         {
             GetComponent<Collider2D>().isTrigger = true;
-            renderer.sortingOrder = -32768;
+            spriteRenderer.sortingOrder = -32768;
         }
 
         switch (state)
@@ -165,14 +161,14 @@ public class ForestTree : MonoBehaviour, Interactive
 
     public void Select()
     {
-        renderer.material.SetInt("_OutlineEnabled", 1);
-        renderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        spriteRenderer.material.SetInt("_OutlineEnabled", 1);
+        spriteRenderer.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
     }
 
     public void Deselect()
     {
-        renderer.material.SetInt("_OutlineEnabled", 0);
-        renderer.transform.localScale = new Vector3(1f, 1f, 1f);
+        spriteRenderer.material.SetInt("_OutlineEnabled", 0);
+        spriteRenderer.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public bool HasSeed()
@@ -237,6 +233,12 @@ public class ForestTree : MonoBehaviour, Interactive
     {
         return state == State.PLANTED_DRY || state == State.PLANTED_WET;
     }
+
+    public bool IsAlive()
+    {
+        return state != State.SOIL && state != State.BURNT;
+    }
+
     public UserAction GetAction(Player player)
     {
         if (IsBurning())
@@ -279,14 +281,14 @@ public class ForestTree : MonoBehaviour, Interactive
                         });
                     break;
                 case State.BURNT:
-                    return new UserAction("Arracher", Button.A, null, 0, () => Arracher_Arbre());
+                    return new UserAction("Arracher", Button.A, null, 0, () => RemoveTree());
             }
         }
 
         return null;
     }
 
-    private void Arracher_Arbre()
+    private void RemoveTree()
     {
         throwTreeSound.Play();
         ChangeState(State.SOIL);
@@ -306,8 +308,8 @@ public class ForestTree : MonoBehaviour, Interactive
         {
             return false;
         }
-        
     }
+
     public void StopBurning()
     {
         burning = -1;

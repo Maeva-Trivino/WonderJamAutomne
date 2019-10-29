@@ -22,16 +22,16 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite filledBucketSprite = null;
     [SerializeField]
-    private RectTransform endScreen;
+    private RectTransform endScreen = null;
     [SerializeField]
-    private GameObject popup;
+    private GameObject popup = null;
 
     //Sound of the theme
     [SerializeField]
-    private AudioSource themeSound;
+    private AudioSource themeSound = null;
     //Sound of the gameOver
     [SerializeField]
-    private AudioSource gameOverSound;
+    private AudioSource gameOverSound = null;
 
     private int nbSeeds = 10;
     private int nbActualTree;    
@@ -111,8 +111,8 @@ public class UIManager : MonoBehaviour
             DisplayEndScreen();
         }
 
-        var f2 = System.Array.FindAll(GameObject.FindGameObjectsWithTag("Tree"), o => !o.GetComponent<ForestTree>().IsSoilOrBurnt);
-        if (f2.Length == 0 && nbSeeds == 0)
+        var f2 = System.Array.Find(GameObject.FindGameObjectsWithTag("Tree"), o => o.GetComponent<ForestTree>().IsAlive());
+        if (f2 == null && nbSeeds == 0)
             DisplayEndScreen();
     }
 

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class HazardAnimationFire: MonoBehaviour
 {
-
     [SerializeField]
     private float speed = 1f;
 
@@ -32,19 +31,20 @@ public class HazardAnimationFire: MonoBehaviour
         {
             ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 
-            List<ForestTree> clone = new List<ForestTree>(treesToBurn.Count);
-            foreach (ForestTree t in treesToBurn)
-            {
-                clone.Add(t);
-            }
+            List<ForestTree> burntTrees = new List<ForestTree>();
 
-            foreach (ForestTree t in clone)
+            foreach (ForestTree t in treesToBurn)
             {
                 if ((((RectTransform)transform).anchoredPosition.x - 350) * 23f / 500 > t.gameObject.transform.position.x)
                 {
                     t.SetOnFire();
-                    treesToBurn.Remove(t);
+                    burntTrees.Add(t);
                 }
+            }
+
+            foreach (ForestTree t in burntTrees)
+            {
+                treesToBurn.Remove(t);
             }
 
             if (((RectTransform)transform).anchoredPosition.x > 1000f)
@@ -52,13 +52,13 @@ public class HazardAnimationFire: MonoBehaviour
                 mooving = false;
             }
         }
-        
     }
 
     private void Reset()
     {
         ((RectTransform)transform).anchoredPosition = Vector3.zero;
     }
+
     public void Trigger(List<ForestTree> treesToBurn)
     {
         this.treesToBurn = treesToBurn;
@@ -66,6 +66,4 @@ public class HazardAnimationFire: MonoBehaviour
         GetComponent<Image>().sprite = sprite;
         mooving = true;
     }
-
-
 }

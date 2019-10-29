@@ -7,7 +7,6 @@ public class Tornado
     public bool Triggerhazard()
     {
         List<ForestTree> seedTrees = new List<ForestTree>();
-        System.Random number = new System.Random();
 
         foreach (GameObject o in GameObject.FindGameObjectsWithTag("Tree"))
         {
