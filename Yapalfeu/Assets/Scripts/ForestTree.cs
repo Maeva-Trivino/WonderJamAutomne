@@ -244,7 +244,7 @@ public class ForestTree : MonoBehaviour, Interactive
         if (IsBurning())
         {
             if (player.HasFilledBucket())
-                return new UserAction("Éteindre", Button.A, null, 0, () => { if (player.ExtinguishFire()) StopBurning(); });
+                return new UserAction("Éteindre", ActionPriority.VERY_HIGH, Button.A, null, 0, () => { if (player.ExtinguishFire()) StopBurning(); });
         }
         else
         {
@@ -252,7 +252,7 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 case State.SOIL:
                     if (player.HasSeed())
-                        return new UserAction("Planter", Button.A, null, 0, () =>
+                        return new UserAction("Planter", ActionPriority.LOW, Button.A, null, 0, () =>
                         {
                             if (player.PlantSeed())
                                 ChangeState(State.PLANTED_DRY);
@@ -260,28 +260,28 @@ public class ForestTree : MonoBehaviour, Interactive
                     break;
                 case State.PLANTED_DRY:
                     if (player.HasFilledBucket())
-                        return new UserAction("Arroser", Button.A, null, 0, () =>
+                        return new UserAction("Arroser", ActionPriority.MEDIUM, Button.A, null, 0, () =>
                         {
                             if (player.WaterPlant()) ChangeState(State.PLANTED_WET);
                         });
                     break;
                 case State.YOUNG_DRY:
                     if (player.HasFilledBucket())
-                        return new UserAction("Arroser", Button.A, null, 0, () =>
+                        return new UserAction("Arroser", ActionPriority.MEDIUM, Button.A, null, 0, () =>
                         {
                             if (player.WaterPlant()) ChangeState(State.YOUNG_WET);
                         });
                     break;
                 case State.MATURE:
                     if (HasSeed())
-                        return new UserAction("Récolter", Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
+                        return new UserAction("Récolter", ActionPriority.MEDIUM, Button.A, new List<Button> () {Button.LEFT, Button.RIGHT } , 3, () =>
                         {
                             player.HarvestSeed();
                             stateDuration = 0;
                         });
                     break;
                 case State.BURNT:
-                    return new UserAction("Arracher", Button.A, null, 0, () => RemoveTree());
+                    return new UserAction("Arracher", ActionPriority.LOW, Button.A, null, 0, () => RemoveTree());
             }
         }
 

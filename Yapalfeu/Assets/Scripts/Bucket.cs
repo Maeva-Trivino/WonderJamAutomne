@@ -67,7 +67,7 @@ public class Bucket : MonoBehaviour, Interactive
     {
         if (!player.HasBucket())
         {
-            return new UserAction("Prendre", Button.A, null, 0, () =>
+            return new UserAction("Prendre", ActionPriority.VERY_HIGH, Button.A, null, 0, () =>
             {
                 if (player.PickUpBucket(this)) 
                     gameObject.SetActive(false);
@@ -77,7 +77,7 @@ public class Bucket : MonoBehaviour, Interactive
         {
             if (player.GetBucket().state != this.state)
             {
-                return new UserAction("Échanger", Button.A, null, 0, () =>
+                return new UserAction("Échanger", ActionPriority.MEDIUM, Button.A, null, 0, () =>
                 {
                     if (player.GetBucket().state != this.state)
                     {

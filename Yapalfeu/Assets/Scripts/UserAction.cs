@@ -5,6 +5,7 @@ using UnityEngine;
 public class UserAction
 {
     public string name;
+    public ActionPriority priority;
     public Button button;
     public List<Button> combos;
     public int comboGoal;
@@ -19,9 +20,10 @@ public class UserAction
     // Action à exécuter
     private System.Action doAction;
 
-    public UserAction(string name, Button button, List<Button> combos, int comboGoal, System.Action doAction, float pressDuration = defaultDuration)
+    public UserAction(string name, ActionPriority priority, Button button, List<Button> combos, int comboGoal, System.Action doAction, float pressDuration = defaultDuration)
     {
         this.name = name;
+        this.priority = priority;
         this.button = button;
         this.combos = combos;
         this.comboGoal = comboGoal;

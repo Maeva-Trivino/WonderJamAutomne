@@ -31,7 +31,7 @@ public class WaterSource : MonoBehaviour, Interactive
         // TODO : ajuster le temps pour remplir le seau
         if (player.HasEmptyBucket())
         { 
-            return new UserAction("Remplir", Button.A, new List<Button>() {Button.UP, Button.DOWN }, 3, () => player.FillBucket());
+            return new UserAction("Remplir", ActionPriority.MEDIUM, Button.A, new List<Button>() {Button.UP, Button.DOWN }, 3, () => player.FillBucket());
         }
         else
         {

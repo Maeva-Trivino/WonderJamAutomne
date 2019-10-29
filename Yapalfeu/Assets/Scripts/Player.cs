@@ -130,35 +130,33 @@ public class Player : MonoBehaviour
         {
             if (inRange.Count > 0)
             {
-                // On cherche l'object intéractif le plus proche
+                // On cherche l'objet intéractif le plus proche avec la meilleure action
+                UserAction bestAction = null;
                 float distanceMin = float.PositiveInfinity;
                 GameObject nearest = null;
 
-                float distanceMinWithAction = float.PositiveInfinity;
-                GameObject nearestWithAction = null;
-                UserAction nearestAction = null;
-
                 foreach (GameObject o in inRange)
                 {
-                    float distance = (o.transform.position - transform.position).magnitude;
                     UserAction action = o.GetComponent<Interactive>().GetAction(this);
+                    float distance = (o.transform.position - transform.position).magnitude;
 
-                    if (distance < distanceMin)
+                    if (action != null)
+                    {
+                        if (bestAction == null ||
+                            bestAction.priority < action.priority ||
+                            (bestAction.priority == action.priority && distance < distanceMin))
+                        {
+                            bestAction = action;
+                            distanceMin = distance;
+                            nearest = o;
+                        }
+                    }
+                    else if (bestAction == null && distance < distanceMin)
                     {
                         distanceMin = distance;
                         nearest = o;
                     }
-
-                    if (action != null && distance < distanceMinWithAction)
-                    {
-                        distanceMinWithAction = distance;
-                        nearestWithAction = o;
-                        nearestAction = action;
-                    }
                 }
-
-                if (nearestWithAction != null)
-                    nearest = nearestWithAction;
 
                 // On désélectionne l'objet sélectionné auparavant
                 if (selected != null)
@@ -169,16 +167,16 @@ public class Player : MonoBehaviour
                 // On le sélectionne (mise en surbrillance)
                 interactive.Select();
 
-                if (nearestAction != null && !IsDashing() && InputManager.GetButtonDown(nearestAction.button))
+                if (bestAction != null && !IsDashing() && InputManager.GetButtonDown(bestAction.button))
                 {
-                    currentAction = nearestAction;
+                    currentAction = bestAction;
                     currentAction.Do();
 
                     if (currentAction.IsDone())
                         currentAction = null;
                 }
 
-                updatePopup(nearestAction);
+                updatePopup(bestAction);
             }
             else
             {
