@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     private CircleCollider2D _collider, _trigger;
 
     private bool onExchangeBucket;
+    private Vector2 input;
     #endregion
     #endregion
 
@@ -99,7 +100,7 @@ public class Player : MonoBehaviour
         }
 
         // On déplace le joueur (utilisation du GetAxisRaw pour avoir des entrées non lissées pour plus de réactivité)
-        Vector2 input = Vector2.zero;
+        input = Vector2.zero;
         if (currentAction == null && !IsDashing())
         {
             input = new Vector2(InputManager.GetAxis(Axis.Horizontal), InputManager.GetAxis(Axis.Vertical));
@@ -124,7 +125,6 @@ public class Player : MonoBehaviour
         _animator.SetBool("Walk_right", InputManager.GetAxis(Axis.Horizontal) > .2f);
         _animator.SetBool("Walk_left", InputManager.GetAxis(Axis.Horizontal) < -.2f);
         _animator.speed = input.magnitude > .1f ? 1 : input.magnitude;
-        _rigidbody2D.MovePosition(_rigidbody2D.position + speed * input * Time.deltaTime);
 
         if (currentAction == null)
         {
@@ -194,6 +194,11 @@ public class Player : MonoBehaviour
         // TODO : changer le bouton pour poser le seau
         if (InputManager.GetButtonDown(Button.B))
             DropBucket();
+    }
+
+    void FixedUpdate()
+    {
+        _rigidbody2D.MovePosition(_rigidbody2D.position + speed * input * Time.deltaTime);
     }
 
     private void updatePopup(UserAction action)
