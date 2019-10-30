@@ -198,7 +198,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rigidbody2D.MovePosition(_rigidbody2D.position + speed * input * Time.deltaTime);
+        _rigidbody2D.MovePosition(_rigidbody2D.position + speed * input * Time.fixedDeltaTime);
     }
 
     private void updatePopup(UserAction action)
