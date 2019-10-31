@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -69,6 +70,7 @@ public class UIManager : MonoBehaviour
     }
 
     private bool paused = false;
+    private Stopwatch stopwatch;
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +83,8 @@ public class UIManager : MonoBehaviour
         LeanTween.alpha((RectTransform)curtain.transform, 0f, .2f);
         bucketImg.color = new Color(1f, 1f, 1f, .5f);
         themeSound.Play();
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
     }
 
     // Update is called once per frame
@@ -92,6 +96,10 @@ public class UIManager : MonoBehaviour
         float seconds = (limitTime - t);
         if (nbActualTree == nbGoalTree)
         {
+            if(nbActualTree == 27)
+            {
+                DisplayWinScreen();
+            }
 
             if (level == 1)
             {
@@ -103,9 +111,9 @@ public class UIManager : MonoBehaviour
             }
 
             level++;
-            if (nbGoalTree > 27)
+            if (nbGoalTree >= 27)
             {
-                nbGoalTree = 28;
+                nbGoalTree = 27;
             }
             SetLevel(level, nbGoalTree);
             SetTime(limitTime + limitTime - t);
@@ -131,7 +139,7 @@ public class UIManager : MonoBehaviour
 
         var f2 = System.Array.Find(GameObject.FindGameObjectsWithTag("Tree"), o => o.GetComponent<ForestTree>().IsAlive());
         if (f2 == null && nbSeeds == 0)
-            DisplayWinScreen(654);// DisplayGameOverScreen(); TODO chqnge
+            DisplayWinScreen();// DisplayGameOverScreen(); TODO Maeva restaure l'ancien appel
     }
 
     public void SetTime(float newTime)
@@ -197,12 +205,13 @@ public class UIManager : MonoBehaviour
         StartCoroutine(WaitForUserGameOver());
     }
 
-    public void DisplayWinScreen(float playDuration)
+    public void DisplayWinScreen()
     {
         themeSound.Stop();
-        // winSound.Play(); TODO Maeva
+        stopwatch.Stop();
+        // winSound.Play(); TODO Maeva dé-commente cette ligne après avoir linké ton son dans l'éditeur
         paused = true;
-        StartCoroutine(WaitForUserWin(playDuration));
+        StartCoroutine(WaitForUserWin());
     }
 
     private IEnumerator WaitForUserGameOver()
@@ -233,7 +242,7 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene("StartScene");
         });
     }
-    private IEnumerator WaitForUserWin(float playDuration)
+    private IEnumerator WaitForUserWin()
     {
         LeanTween.alpha(winScreen, 0f, 0f);
         LeanTween.alpha((RectTransform)popup.transform, 0f, 0f);
@@ -252,12 +261,16 @@ public class UIManager : MonoBehaviour
         LeanTween.alphaText((RectTransform)winScreen.GetChild(3), 1f, 0f);
 
         // Process score animation
-        float speed = 7, time = 0, progress = 0;
+        float 
+            speed = 7, 
+            time = 0, 
+            progress = 0, 
+            totalTime = stopwatch.Elapsed.Seconds;
         int index = 0;
-        while (time < playDuration)
+        while (time < totalTime)
         {
             yield return new WaitForSeconds(.01f);
-            progress = time / playDuration;
+            progress = time / totalTime;
             int current = (int)(forest.Count * progress);
             for (int i = index; i < current; i++)
             {
@@ -280,7 +293,7 @@ public class UIManager : MonoBehaviour
             forest[i].GetComponent<Image>().color = Color.white;
             LeanTween.scale(forest[i], Vector3.one, 0.2f).setEaseOutBack();
         }
-        winScreen.GetChild(3).GetComponent<Text>().text = ((int)(playDuration / 60)) + ":" + (playDuration % 60);
+        winScreen.GetChild(3).GetComponent<Text>().text = ((int)(totalTime / 60)) + ":" + (totalTime % 60);
 
         // Show final text
         yield return new WaitForSeconds(.8f);
