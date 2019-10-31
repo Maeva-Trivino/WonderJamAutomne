@@ -264,8 +264,8 @@ public class UIManager : MonoBehaviour
         float 
             speed = 7, 
             time = 0, 
-            progress = 0, 
-            totalTime = stopwatch.Elapsed.Seconds;
+            progress = 0,
+            totalTime = (float) stopwatch.Elapsed.TotalSeconds;
         int index = 0;
         while (time < totalTime)
         {
@@ -293,7 +293,7 @@ public class UIManager : MonoBehaviour
             forest[i].GetComponent<Image>().color = Color.white;
             LeanTween.scale(forest[i], Vector3.one, 0.2f).setEaseOutBack();
         }
-        winScreen.GetChild(3).GetComponent<Text>().text = ((int)(totalTime / 60)) + ":" + (totalTime % 60);
+        winScreen.GetChild(3).GetComponent<Text>().text = ((int)(totalTime / 60)) + ":" + (totalTime % 60).ToString("00");
 
         // Show final text
         yield return new WaitForSeconds(.8f);
