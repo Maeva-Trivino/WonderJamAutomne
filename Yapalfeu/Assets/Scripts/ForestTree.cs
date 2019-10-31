@@ -78,7 +78,7 @@ public class ForestTree : MonoBehaviour, Interactive
             {
                 if(state == State.MATURE)
                 {
-                    UIManager.instance.DeleteTree();
+                    UIManager.Instance.DeleteTree();
                     ChangeState(State.BURNT);
                 }
                 else
@@ -104,7 +104,7 @@ public class ForestTree : MonoBehaviour, Interactive
                 {
                     growTreeSound.Play();
                     ChangeState(State.MATURE);
-                    UIManager.instance.AddTree();
+                    UIManager.Instance.AddTree();
                 }
                 break;
             case State.MATURE:

@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
         seedCount = 7;
         inRange = new HashSet<GameObject>();
         updatePopup(null);
-        UIManager.instance.UpdateSeeds(seedCount);
+        UIManager.Instance.UpdateSeeds(seedCount);
 
         _animator = GetComponentInChildren<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -291,7 +291,7 @@ public class Player : MonoBehaviour
         {
             plantSeedSound.Play();
             seedCount--;
-            UIManager.instance.UpdateSeeds(seedCount);
+            UIManager.Instance.UpdateSeeds(seedCount);
             return true;
         }
         else
@@ -367,7 +367,7 @@ public class Player : MonoBehaviour
 
     private void EmptyBucket()
     {
-        UIManager.instance.EmptyBucket();
+        UIManager.Instance.EmptyBucket();
         bucket.Empty();
         bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
     }
@@ -376,7 +376,7 @@ public class Player : MonoBehaviour
     {
         getSeedSound.Play();
         seedCount++;
-        UIManager.instance.UpdateSeeds(seedCount);
+        UIManager.Instance.UpdateSeeds(seedCount);
     }
 
     public bool PickUpBucket(Bucket bucket)
@@ -387,7 +387,7 @@ public class Player : MonoBehaviour
             this.bucket = bucket;
             this.bucket.Deselect();
             this.bucket.gameObject.SetActive(false);
-            UIManager.instance.PickUpBucket(this.bucket.isFilled());
+            UIManager.Instance.PickUpBucket(this.bucket.isFilled());
             bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             return true;
         }
@@ -405,7 +405,7 @@ public class Player : MonoBehaviour
             {
                 fillBucketSound.Play();
             }
-            UIManager.instance.FilledBucket();
+            UIManager.Instance.FilledBucket();
             bucket.Fill();
             bucket_on_head.GetComponent<SpriteRenderer>().sprite = this.bucket.GetComponentInChildren<SpriteRenderer>().sprite;
             onExchangeBucket = false;
@@ -424,7 +424,7 @@ public class Player : MonoBehaviour
             getBucketSound.Play();
             // TODO : poser à côté du joueur et non sur le joueur
             bucket.SetOnGround(transform.position + (Vector3)direction);
-            UIManager.instance.DropBucket();
+            UIManager.Instance.DropBucket();
             bucket_on_head.GetComponent<SpriteRenderer>().sprite = null;
             bucket = null;
             return true;
