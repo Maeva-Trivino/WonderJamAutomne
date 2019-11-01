@@ -142,6 +142,16 @@ PrefabInstance:
       propertyPath: m_TargetCamera
       value: 
       objectReference: {fileID: 1390326746}
+    - target: {fileID: 3612313337838529959, guid: 66e0d7295b46d1e4b92cc74c8c374bd4,
+        type: 3}
+      propertyPath: m_DataSource
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612313337838529959, guid: 66e0d7295b46d1e4b92cc74c8c374bd4,
+        type: 3}
+      propertyPath: m_Url
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3612313339026076524, guid: 66e0d7295b46d1e4b92cc74c8c374bd4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -351,6 +361,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1990903342}
     m_Modifications:
+    - target: {fileID: 2147424716843450015, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_Name
+      value: MainScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147424716843450015, guid: e9186fb600da47c44a345f753f852184,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9034187809726580581, guid: e9186fb600da47c44a345f753f852184,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -438,16 +458,6 @@ PrefabInstance:
       value: 4.399994
       objectReference: {fileID: 0}
     - target: {fileID: 7065824142101282862, guid: e9186fb600da47c44a345f753f852184,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147424716843450015, guid: e9186fb600da47c44a345f753f852184,
-        type: 3}
-      propertyPath: m_Name
-      value: MainScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147424716843450015, guid: e9186fb600da47c44a345f753f852184,
         type: 3}
       propertyPath: m_IsActive
       value: 1

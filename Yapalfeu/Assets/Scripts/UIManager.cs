@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
 
     private int nbSeeds = 10;
     private int nbActualTree;
-    private int nbGoalTree = 1;//
+    private int nbGoalTree = 1;
     private int level = 1;
     private float startTime;
 
@@ -139,7 +139,7 @@ public class UIManager : MonoBehaviour
 
         var f2 = System.Array.Find(GameObject.FindGameObjectsWithTag("Tree"), o => o.GetComponent<ForestTree>().IsAlive());
         if (f2 == null && nbSeeds == 0)
-            DisplayWinScreen();// DisplayGameOverScreen(); TODO Maeva restaure l'ancien appel
+            DisplayGameOverScreen();
     }
 
     public void SetTime(float newTime)
