@@ -209,7 +209,7 @@ public class UIManager : MonoBehaviour
     {
         themeSound.Stop();
         stopwatch.Stop();
-        // winSound.Play(); TODO Maeva dé-commente cette ligne après avoir linké ton son dans l'éditeur
+        winSound.Play();
         paused = true;
         StartCoroutine(WaitForUserWin());
     }
@@ -260,8 +260,9 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(.65f);
         LeanTween.alphaText((RectTransform)winScreen.GetChild(3), 1f, 0f);
 
+
         // Process score animation
-        float 
+        float
             speed = 7, 
             time = 0, 
             progress = 0,
