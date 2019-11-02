@@ -70,6 +70,8 @@ public class ForestTree : MonoBehaviour, Interactive
     // Update is called once per frame
     void Update()
     {
+        if(UIManager.Instance.HasEnded)
+            return;
         if (IsBurning())
         {
             burning += Time.deltaTime;

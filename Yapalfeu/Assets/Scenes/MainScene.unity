@@ -7992,6 +7992,16 @@ PrefabInstance:
       propertyPath: winSound
       value: 
       objectReference: {fileID: 1224196493}
+    - target: {fileID: 3987054452544382379, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: levelTrees
+      value: 
+      objectReference: {fileID: 580715447}
+    - target: {fileID: 3987054452544382379, guid: 92b83c1c51113ee469844f93a459ce2b,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1521029449}
     - target: {fileID: 3827114464722650590, guid: 92b83c1c51113ee469844f93a459ce2b,
         type: 3}
       propertyPath: m_AnchorMin.y

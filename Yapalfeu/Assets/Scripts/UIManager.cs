@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("General")]
     [SerializeField]
     private Image curtain = null;
     [SerializeField]
@@ -24,10 +25,14 @@ public class UIManager : MonoBehaviour
     private Sprite filledBucketSprite = null;
     [SerializeField]
     private GameObject popup = null;
+
+    [Header("Level objects")]
     [SerializeField]
     private List<RectTransform> hazards = null;
-
-
+    [SerializeField]
+    private GameObject levelTrees = null;
+    [SerializeField]
+    private GameObject player = null;
     //Sound of the theme
     [SerializeField]
     private AudioSource themeSound = null;
@@ -45,7 +50,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private AudioSource popSound = null;
     [SerializeField]
-    //Sound of the gameOver
+    //Sound of the win
     private RectTransform winScreen = null;
     [SerializeField]
     private List<RectTransform> forest = null;
@@ -58,18 +63,10 @@ public class UIManager : MonoBehaviour
 
     private static UIManager internalInstance;
 
-    public static UIManager Instance
-    {
-        get
-        {
-            if (internalInstance == null)
-                return FindObjectOfType<UIManager>();
-            else
-                return internalInstance;
-        }
-    }
+    public static UIManager Instance => internalInstance == null ? internalInstance = FindObjectOfType<UIManager>() : internalInstance;
 
-    private bool paused = false;
+    public bool HasEnded { get; private set; } = false;
+    public bool HasWon { get; private set; } = false;
     private Stopwatch stopwatch;
 
     // Start is called before the first frame update
@@ -90,13 +87,13 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (paused)
+        if (HasEnded)
             return;
         float t = Time.time - startTime;
         float seconds = (limitTime - t);
         if (nbActualTree == nbGoalTree)
         {
-            if(nbActualTree == 27)
+            if (nbActualTree == 27)
             {
                 DisplayWinScreen();
             }
@@ -137,6 +134,7 @@ public class UIManager : MonoBehaviour
             DisplayGameOverScreen();
         }
 
+        // The following line doesn't exist. Go your way, stranger. (¬_¬)
         var f2 = System.Array.Find(GameObject.FindGameObjectsWithTag("Tree"), o => o.GetComponent<ForestTree>().IsAlive());
         if (f2 == null && nbSeeds == 0)
             DisplayGameOverScreen();
@@ -200,7 +198,7 @@ public class UIManager : MonoBehaviour
     {
         themeSound.Stop();
         gameOverSound.Play();
-        paused = true;
+        HasEnded = true;
         endScreen.GetChild(2).GetComponent<Text>().text = level.ToString();
         StartCoroutine(WaitForUserGameOver());
     }
@@ -210,7 +208,8 @@ public class UIManager : MonoBehaviour
         themeSound.Stop();
         stopwatch.Stop();
         winSound.Play();
-        paused = true;
+        HasEnded = true;
+        HasWon = true;
         StartCoroutine(WaitForUserWin());
     }
 
@@ -223,6 +222,8 @@ public class UIManager : MonoBehaviour
         yield return null;
         endScreen.gameObject.SetActive(true);
         LeanTween.alpha(endScreen, 1f, .2f).setRecursive(false);
+        LeanTween.alpha(levelTrees, 0f, .2f);
+        LeanTween.alpha(player, 0f, .2f);
         yield return new WaitForSeconds(.6f);
         LeanTween.alphaText((RectTransform)endScreen.GetChild(0), 1f, 0f);
         yield return new WaitForSeconds(1.4f);
@@ -253,6 +254,8 @@ public class UIManager : MonoBehaviour
         yield return null;
         winScreen.gameObject.SetActive(true);
         LeanTween.alpha(winScreen, 1f, .2f).setRecursive(false);
+        LeanTween.alpha(levelTrees, 0f, .2f);
+        LeanTween.alpha(player, 0f, .2f);
         yield return new WaitForSeconds(.6f);
         LeanTween.alphaText((RectTransform)winScreen.GetChild(1), 1f, 0f);
         yield return new WaitForSeconds(1.15f);
@@ -263,10 +266,10 @@ public class UIManager : MonoBehaviour
 
         // Process score animation
         float
-            speed = 7, 
-            time = 0, 
+            speed = 7,
+            time = 0,
             progress = 0,
-            totalTime = (float) stopwatch.Elapsed.TotalSeconds;
+            totalTime = (float)stopwatch.Elapsed.TotalSeconds;
         int index = 0;
         while (time < totalTime)
         {

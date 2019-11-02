@@ -73,6 +73,8 @@ public class HazardAnimationTornado : MonoBehaviour
     }
     public void Trigger(List<ForestTree> treesToWind)
     {
+        if(UIManager.Instance.HasWon)
+            return;
         this.treesToWind = treesToWind;
         Reset();
         GetComponent<Image>().sprite = sprite;

@@ -27,7 +27,7 @@ public class HazardAnimationFire: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mooving)
+        if (mooving && !UIManager.Instance.HasWon)
         {
             ((RectTransform)transform).anchoredPosition += Vector2.right * speed * Time.deltaTime;
 

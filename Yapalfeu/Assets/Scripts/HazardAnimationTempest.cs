@@ -80,6 +80,8 @@ public class HazardAnimationTempest : MonoBehaviour
     }
     public void Trigger(List<ForestTree> treesToDrown, List<ForestTree> burnableTrees)
     {
+        if(UIManager.Instance.HasWon)
+            return;
         this.treesToDrown = treesToDrown;
         this.burnableTrees = burnableTrees;
         Reset();

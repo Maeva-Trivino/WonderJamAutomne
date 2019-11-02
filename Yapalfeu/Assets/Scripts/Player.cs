@@ -82,6 +82,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(UIManager.Instance.HasEnded)
+            return;
+
         SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
         renderers[0].sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
         renderers[1].sortingOrder = renderers[0].sortingOrder + 1;
