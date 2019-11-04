@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
         isCreditOpen = false;
         group = GetComponent<CanvasGroup>();
         LeanTween.alpha((RectTransform)videoIntro.transform.parent, 0f, 0f).setRecursive(false);
+
+        videoIntro.url = System.IO.Path.Combine(Application.streamingAssetsPath, "Prologue.mp4");
         videoIntro.Play();
         videoIntro.Pause();
 

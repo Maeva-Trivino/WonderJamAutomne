@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("General")]
     [SerializeField]
     private Image curtain = null;
     [SerializeField]
@@ -22,40 +24,55 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite filledBucketSprite = null;
     [SerializeField]
-    private RectTransform endScreen = null;
-    [SerializeField]
     private GameObject popup = null;
 
+    [Header("Level objects")]
+    [SerializeField]
+    private List<RectTransform> hazards = null;
+    [SerializeField]
+    private GameObject levelTrees = null;
+    [SerializeField]
+    private GameObject player = null;
     //Sound of the theme
     [SerializeField]
     private AudioSource themeSound = null;
-    //Sound of the gameOver
+
+    [Header("Game Over Screen")]
     [SerializeField]
     private AudioSource gameOverSound = null;
+    [SerializeField]
+    //Sound of the gameOver
+    private RectTransform endScreen = null;
+
+    [Header("Win Screen")]
+    [SerializeField]
+    private AudioSource winSound = null;
+    [SerializeField]
+    private AudioSource popSound = null;
+    [SerializeField]
+    //Sound of the win
+    private RectTransform winScreen = null;
+    [SerializeField]
+    private List<RectTransform> forest = null;
 
     private int nbSeeds = 10;
-    private int nbActualTree;    
-    private int nbGoalTree = 1;//
+    private int nbActualTree;
+    private int nbGoalTree = 1;
     private int level = 1;
     private float startTime;
 
     private static UIManager internalInstance;
 
-    public static UIManager instance {
-        get
-        {
-            if (internalInstance == null)
-                return FindObjectOfType<UIManager>();
-            else
-                return internalInstance;
-        }
-    }
+    public static UIManager Instance => internalInstance == null ? internalInstance = FindObjectOfType<UIManager>() : internalInstance;
 
-    private bool paused = false;
+    public bool HasEnded { get; private set; } = false;
+    public bool HasWon { get; private set; } = false;
+    private Stopwatch stopwatch;
 
     // Start is called before the first frame update
     void Start()
     {
+        forest.Sort((i, j) => (int)Random.Range(0, 2) * 2 - 1);
         internalInstance = this;
         startTime = Time.time;
         SetLevel(level, nbGoalTree);
@@ -63,36 +80,42 @@ public class UIManager : MonoBehaviour
         LeanTween.alpha((RectTransform)curtain.transform, 0f, .2f);
         bucketImg.color = new Color(1f, 1f, 1f, .5f);
         themeSound.Play();
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(paused)
+        if (HasEnded)
             return;
         float t = Time.time - startTime;
         float seconds = (limitTime - t);
-        if(nbActualTree == nbGoalTree)
+        if (nbActualTree == nbGoalTree)
         {
-
-            if(level == 1)
+            if (nbActualTree == 27)
             {
-                nbGoalTree+=4;
+                DisplayWinScreen();
+            }
+
+            if (level == 1)
+            {
+                nbGoalTree += 4;
             }
             else
             {
                 nbGoalTree += 5;
             }
-            
+
             level++;
-            if (nbGoalTree > 27)
+            if (nbGoalTree >= 27)
             {
-                nbGoalTree = 28;
+                nbGoalTree = 27;
             }
-            SetLevel(level,nbGoalTree) ;
-            SetTime(limitTime + limitTime-t);
+            SetLevel(level, nbGoalTree);
+            SetTime(limitTime + limitTime - t);
         }
-        
+
         if (seconds >= 100)
         {
             timerText.text = seconds.ToString("f0");
@@ -108,12 +131,13 @@ public class UIManager : MonoBehaviour
         else
         {
             timerText.text = "OUT OF TIME";
-            DisplayEndScreen();
+            DisplayGameOverScreen();
         }
 
+        // The following line doesn't exist. Go your way, stranger. (¬_¬)
         var f2 = System.Array.Find(GameObject.FindGameObjectsWithTag("Tree"), o => o.GetComponent<ForestTree>().IsAlive());
         if (f2 == null && nbSeeds == 0)
-            DisplayEndScreen();
+            DisplayGameOverScreen();
     }
 
     public void SetTime(float newTime)
@@ -170,23 +194,36 @@ public class UIManager : MonoBehaviour
         bucketImg.sprite = isFilled ? filledBucketSprite : emptyBucketSprite;
     }
 
-    public void DisplayEndScreen()
+    public void DisplayGameOverScreen()
     {
         themeSound.Stop();
         gameOverSound.Play();
-        paused = true;
+        HasEnded = true;
         endScreen.GetChild(2).GetComponent<Text>().text = level.ToString();
-        StartCoroutine(WaitForUser());
+        StartCoroutine(WaitForUserGameOver());
     }
 
-    private IEnumerator WaitForUser()
+    public void DisplayWinScreen()
+    {
+        themeSound.Stop();
+        stopwatch.Stop();
+        winSound.Play();
+        HasEnded = true;
+        HasWon = true;
+        StartCoroutine(WaitForUserWin());
+    }
+
+    private IEnumerator WaitForUserGameOver()
     {
         LeanTween.alpha(endScreen, 0f, 0f);
-        LeanTween.alpha((RectTransform) popup.transform, 0f, 0f);
+        LeanTween.alpha((RectTransform)popup.transform, 0f, 0f);
 
+        // Show step by step text
         yield return null;
         endScreen.gameObject.SetActive(true);
         LeanTween.alpha(endScreen, 1f, .2f).setRecursive(false);
+        LeanTween.alpha(levelTrees, 0f, .2f);
+        LeanTween.alpha(player, 0f, .2f);
         yield return new WaitForSeconds(.6f);
         LeanTween.alphaText((RectTransform)endScreen.GetChild(0), 1f, 0f);
         yield return new WaitForSeconds(1.4f);
@@ -197,8 +234,81 @@ public class UIManager : MonoBehaviour
         Color color = new Color(168f / 255f, 168f / 255f, 168f / 255f, 1);
         LeanTween.value(0, 1, 1.5f).setLoopClamp().setOnUpdate((float val)
              => endScreen.GetChild(3).GetComponent<Text>().color = color * Mathf.Round(val));
+
+        // Wait for user input
         yield return new WaitUntil(() => InputManager.GetButtonDown(Button.A));
-        LeanTween.alpha((RectTransform) curtain.transform, 1f, .2f).setOnComplete(()=> {
+        LeanTween.alpha((RectTransform)curtain.transform, 1f, .2f).setOnComplete(() =>
+        {
+            LeanTween.cancelAll();
+            SceneManager.LoadScene("StartScene");
+        });
+    }
+    private IEnumerator WaitForUserWin()
+    {
+        LeanTween.alpha(winScreen, 0f, 0f);
+        LeanTween.alpha((RectTransform)popup.transform, 0f, 0f);
+        foreach (RectTransform rt in hazards)
+            LeanTween.alpha(rt, 0f, .2f);
+
+        // Show step by step text
+        yield return null;
+        winScreen.gameObject.SetActive(true);
+        LeanTween.alpha(winScreen, 1f, .2f).setRecursive(false);
+        LeanTween.alpha(levelTrees, 0f, .2f);
+        LeanTween.alpha(player, 0f, .2f);
+        yield return new WaitForSeconds(.6f);
+        LeanTween.alphaText((RectTransform)winScreen.GetChild(1), 1f, 0f);
+        yield return new WaitForSeconds(1.15f);
+        LeanTween.alphaText((RectTransform)winScreen.GetChild(2), 1f, 0f);
+        yield return new WaitForSeconds(.65f);
+        LeanTween.alphaText((RectTransform)winScreen.GetChild(3), 1f, 0f);
+
+
+        // Process score animation
+        float
+            speed = 7,
+            time = 0,
+            progress = 0,
+            totalTime = (float)stopwatch.Elapsed.TotalSeconds;
+        int index = 0;
+        while (time < totalTime)
+        {
+            yield return new WaitForSeconds(.01f);
+            progress = time / totalTime;
+            int current = (int)(forest.Count * progress);
+            for (int i = index; i < current; i++)
+            {
+                forest[i].GetComponent<Image>().color = Color.white;
+                LeanTween.scale(forest[i], Vector3.one, 0.2f).setEaseOutBack();
+                popSound.Play();
+            }
+            winScreen.GetChild(3).GetComponent<Text>().text = ((int)(time / 60)) + ":" + (time % 60).ToString("00");
+
+            time += speed;
+            index = current;
+        }
+
+        // Set final values
+        LeanTween.scale((RectTransform)winScreen.GetChild(3), Vector3.one, 0.15f).setEaseOutBack();
+        yield return new WaitForSeconds(.01f);
+
+        for (int i = index; i < forest.Count; i++)
+        {
+            forest[i].GetComponent<Image>().color = Color.white;
+            LeanTween.scale(forest[i], Vector3.one, 0.2f).setEaseOutBack();
+        }
+        winScreen.GetChild(3).GetComponent<Text>().text = ((int)(totalTime / 60)) + ":" + (totalTime % 60).ToString("00");
+
+        // Show final text
+        yield return new WaitForSeconds(.8f);
+        Color color = new Color(168f / 255f, 168f / 255f, 168f / 255f, 1);
+        LeanTween.value(0, 1, 1.5f).setLoopClamp().setOnUpdate((float val)
+             => winScreen.GetChild(4).GetComponent<Text>().color = color * Mathf.Round(val));
+
+        // Wait for user input
+        yield return new WaitUntil(() => InputManager.GetButtonDown(Button.A));
+        LeanTween.alpha((RectTransform)curtain.transform, 1f, .2f).setOnComplete(() =>
+        {
             LeanTween.cancelAll();
             SceneManager.LoadScene("StartScene");
         });
